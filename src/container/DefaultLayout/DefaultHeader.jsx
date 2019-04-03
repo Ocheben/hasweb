@@ -46,7 +46,7 @@ class DefaultHeader extends React.Component {
             >
             <Media query="(max-width: 992px)" onChange={matches => this.setState({isMobile: matches})}/>
             <Toolbar disableGutters={false}>
-            { isMobile &&
+            { isMobile && userInfo.role === 'admin' &&
                 <IconButton
                 color="inherit"
                 aria-label="Open drawer"
