@@ -1,26 +1,76 @@
 import React, { Component } from 'react';
+import { HashRouter, Route, Switch, withRouter} from 'react-router-dom';
 import logo from './logo.svg';
 import './App.css';
+import { DefaultLayout } from './container/DefaultLayout';
+import { Login, Register } from './views/Pages';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import {green, blue} from './mui'
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: blue[700],
+    },
+    secondary: {
+      light: '#daa520',
+      main: '#f44336',
+      dark: '#ba000d',
+      contrastText: '#000',
+    },
+    error: {
+      main: '#f86c6b'
+    },
+    success:{
+      main: 'green'
+    },
+    disabled: {
+      main:'#daa520'
+    },
+    textPrimary: {
+      main: '#daa520'
+    }
+  },
+  direction: 'ltr',
+  overrides: {
+    MuiStepLabel: {
+        label: {
+            backgroundColor: "#d9ecbc",
+            color: 'white',
+            '&$active': {
+                color: 'primary',
+                backgroundColor: "#fff",
+                border: "2px solid #00913e",
+                
+            },
+            '&$completed': {
+                color: '#fff',
+                backgroundColor: "#00913e"
+            },
+        },
+    },
+    MuiStep:{
+      horizontal:{
+        paddingLeft: 0,
+        paddingRight: 0
+      }
+    }
+},
+});
 
 class App extends Component {
   render() {
     return (
+      <MuiThemeProvider theme={theme}>
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <HashRouter>
+      <Switch>
+      <Route exact path="/login" name="Login" component={Login} />
+      <Route path="/" name="Home" component={DefaultLayout} />
+      </Switch>
+      </HashRouter>
+      
       </div>
+      </MuiThemeProvider>
     );
   }
 }
