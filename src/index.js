@@ -4,7 +4,6 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { createStore, applyMiddleware, compose } from 'redux';
-import { createLogger } from 'redux-logger';
 import thunk from 'redux-thunk';
 import rootReducer from './_reducers'
 import { Provider } from 'react-redux';
@@ -32,11 +31,10 @@ const persistConfig = {
    };
    
 const pReducer = persistReducer(persistConfig, rootReducer);
-const logger = createLogger();
 const store = createStore(
     pReducer,
     {},
-    compose(applyMiddleware(thunk, logger),
+    compose(applyMiddleware(thunk),
         // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
     )
 )

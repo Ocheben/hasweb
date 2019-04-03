@@ -6,7 +6,7 @@ import logo from '../../../assets/img/logo.png'
 import { styles } from '../../../scss/style'
 import { Grid, Card, CardContent, CardActions, TextField, CircularProgress,
    InputAdornment, LocalPhone, Visibility, VisibilityOff, IconButton,
-    Grow, classNames, Button} from '../../../mui'
+    Grow, classNames, Button, Icon} from '../../../mui'
 import {getData, URLS, METHODS} from '../../../_services'
 import { connect } from 'react-redux';
 import {saveUser} from '../../../_actions/authAction'
@@ -116,7 +116,7 @@ class Login extends Component {
             // error={("phone" in formValidity) && !formValidity.phone}
             onChange={this.handleChange}
             InputProps={{
-              endAdornment: <InputAdornment position="end"><LocalPhone className={classes.inputIcon} /></InputAdornment>,
+              endAdornment: <InputAdornment position="end"><Icon className={classes.inputIcon}>mail_outline</Icon></InputAdornment>,
               type: "tel",
               classes: {
                 input: classes.size,
