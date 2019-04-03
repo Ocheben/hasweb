@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { HashRouter, Route, Switch, withRouter} from 'react-router-dom';
-import logo from './logo.svg';
+import { HashRouter, Route, Switch} from 'react-router-dom';
 import './App.css';
 import { DefaultLayout } from './container/DefaultLayout';
-import { Login, Register } from './views/Pages';
+import { Login,  } from './views/Pages';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
-import {green, blue} from './mui'
+import {blue} from './mui'
 const theme = createMuiTheme({
   palette: {
     primary: {

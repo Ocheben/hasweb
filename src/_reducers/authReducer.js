@@ -7,23 +7,56 @@ const initState = {
 }
 
 const { LOGIN,  LOGOUT } = AUTHACTIONS
-const {  ASSIGN } = USERACTIONS
+const {  ASSIGN, PICKUP, DELIVER } = USERACTIONS
 
-const updateObjectInArray=(array, action)=> {
-    console.log(action)
+const assignObjectInArray=(array, action)=> {
     return array.map((item, index) => {
       if (index !== action.index) {
-        // This isn't the item we care about - keep it as-is
         return item
       }
   
-      // Otherwise, this is the one we want - return an updated value
       else {
       return {
         ...item,
         bikerid:action.bikerid,
         status: action.status,
         assignee: action.assignee
+
+      }
+    }
+    })
+  }
+
+const pickupObjectInArray=(array, action)=> {
+    return array.map((item, index) => {
+      if (index !== action.index) {
+        return item
+      }
+  
+      else {
+      return {
+        ...item,
+        pickupDate: action.date,
+        pickupTime: action.time,
+        status: action.status
+
+      }
+    }
+    })
+  }
+
+const deliverObjectInArray=(array, action)=> {
+    return array.map((item, index) => {
+      if (index !== action.index) {
+        return item
+      }
+  
+      else {
+      return {
+        ...item,
+        deliverDate: action.date,
+        deliverTime: action.time,
+        status: action.status
 
       }
     }
@@ -38,7 +71,8 @@ const saveUser = (state = initState, action)=>{
             ...state,
             userInfo: {...state.userInfo, ...action.payload},
             shipments: action.payload.shipments,
-            bikers: action.payload.bikers ? action.payload.bikers : []
+            bikers: action.payload.bikers ? action.payload.bikers : [],
+            dashStatus: action.payload.dashStatus ? action.payload.dashStatus : {}
         }
 
         case LOGOUT:
@@ -48,10 +82,22 @@ const saveUser = (state = initState, action)=>{
         }
 
         case ASSIGN:
-        console.log("assign") 
         return {
             ...state,
-            shipments: updateObjectInArray(state.shipments, action.payload),
+            shipments: assignObjectInArray(state.shipments, action.payload),
+            
+        }
+
+        case PICKUP:
+        return {
+            ...state,
+            shipments: pickupObjectInArray(state.shipments, action.payload),
+            
+        }
+        case DELIVER:
+        return {
+            ...state,
+            shipments: deliverObjectInArray(state.shipments, action.payload),
             
         }
             

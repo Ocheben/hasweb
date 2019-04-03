@@ -1,7 +1,7 @@
 import {AUTHACTIONS, USERACTIONS} from '../_constants'
 
 const {LOGIN, LOGOUT} = AUTHACTIONS
-const {ASSIGN} = USERACTIONS
+const {ASSIGN, PICKUP, DELIVER} = USERACTIONS
 
 export const saveUser = (userData) => {
     return {
@@ -11,9 +11,22 @@ export const saveUser = (userData) => {
 }
 
 export const assignBiker = (data) => {
-    console.log(ASSIGN)
     return {
         type: ASSIGN,
+        payload: data
+    }
+}
+
+export const pickUp = (data) => {
+    return {
+        type: PICKUP,
+        payload: data
+    }
+}
+
+export const deliver = (data) => {
+    return {
+        type: DELIVER,
         payload: data
     }
 }

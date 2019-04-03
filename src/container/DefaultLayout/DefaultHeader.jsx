@@ -2,15 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
-import { AppBar, Toolbar, IconButton, MenuIcon, Typography, Avatar,
-        AccountCircle, MenuItem, Icon } from '../../mui';
+import { AppBar, Toolbar, IconButton, MenuIcon, Typography, MenuItem, Icon } from '../../mui';
 import { Menu } from '@material-ui/core/'
 import { styles} from '../../scss/style';
 import Media from "react-media";
 import logo from '../../assets/img/logo.png';
 import { connect } from 'react-redux';
 import {withRouter} from 'react-router-dom';
-import {removeUser} from '../../_actions/authAction'
+import {removeUser} from '../../_actions/authAction';
 
 
 class DefaultHeader extends React.Component {
@@ -33,7 +32,7 @@ class DefaultHeader extends React.Component {
         this.props.history.push('/login');
     };
     render () {
-        const {classes, open, handleDrawerOpen, sidebarFixed} = this.props
+        const {classes, open, handleDrawerOpen, sidebarFixed, userInfo} = this.props
         const { isMobile, anchorEl } = this.state
         return (
             <AppBar
@@ -41,7 +40,7 @@ class DefaultHeader extends React.Component {
             className={classNames({
                 [classes.appBarShift]: isMobile ? false : sidebarFixed ,
                 [classes.appBar]: !isMobile,
-                [classes.mobileAppBar]: isMobile
+                [classes.mobileAppBar]: isMobile ? true : userInfo.role !== 'admin'
 
             })}
             >

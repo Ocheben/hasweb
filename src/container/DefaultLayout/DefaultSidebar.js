@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import {withRouter} from 'react-router-dom';
 import { styles} from '../../scss/style';
 import Media from "react-media";
-import {classNames, DashboardIcon, ReceiptIcon, PeopleOutlined, Button, Icon, Avatar, CssBaseline,
+import {classNames, Icon, Avatar, CssBaseline,
           List, ListItem, ListItemIcon, ListItemText, Drawer, IconButton,
           Typography, MenuIcon, NotesIcon} from '../../mui';
 import avatar from '../../assets/img/avatar.png';
@@ -12,7 +12,6 @@ import { connect } from 'react-redux';
 import {removeUser} from '../../_actions/authAction'
 import { BikerIcon, HistoryIcon, ShipmentIcon, HomeIcon } from '../../views/Components';
 
-// import { }
 
 const menuList = [
     {name: "Dashboard", icon: <HomeIcon color="#fff" sidebarIcon/>, link:"/dashboard"},
@@ -58,8 +57,8 @@ class DefaultSidebar extends React.Component {
   }
 
   render() {
-    const { classes, theme, open, handleDrawerClose, handleDrawerOpen, location, history, userInfo } = this.props;
-    const { isMobile, sidebarFixed, openNest } = this.state
+    const { classes,  open, handleDrawerClose, history, userInfo } = this.props;
+    const { isMobile, sidebarFixed, } = this.state
     
     return (
       <div className={classes.root}>
@@ -67,21 +66,14 @@ class DefaultSidebar extends React.Component {
         }/>
         <CssBaseline />
         <Drawer
-          // className={classes.drawer}
-          // variant={isMobile ? "temporary" : "persistent"}
           anchor="left"
           open={open}
-          // classes={{
-          //   paper: classes.drawerPaper,
-          //   // root: classes.sidebar
-          // }}
           onMouseEnter={!sidebarFixed ? this.onMouseEnter : undefined}
           onMouseLeave={!sidebarFixed ? this.onMouseLeave : undefined}
           variant={isMobile ? "temporary" : "permanent"}
           className={classNames(classes.drawer, {
             [classes.drawerOpen]: open,
             [classes.drawerClose]: !open,
-            // [classes.drawerFixed]: !sidebarFixed
           })}
           classes={{
             paper: classNames(classes.drawerPaper, {
@@ -107,8 +99,8 @@ class DefaultSidebar extends React.Component {
             [classes.drawerHeaderClosed]: !open
           })}>
           <Avatar alt="User Avatar" src={avatar} className={classes.userAvatar}  />
-          <Typography variant="subtitle2" color="inherit">{userInfo.name}</Typography>
-          <Typography variant="caption" color="inherit" gutterBottom>{userInfo.email}</Typography>
+          <Typography variant="subtitle2" className={classes.sidebarAvatarText} color="inherit">{userInfo.name}</Typography>
+          <Typography variant="caption" className={classes.sidebarAvatarText} color="inherit" gutterBottom>{userInfo.email}</Typography>
           </div>
 }
           <List >
@@ -119,11 +111,6 @@ class DefaultSidebar extends React.Component {
               </ListItem>
             ))}
           </List>
-          <div className={classes.logoutButton}>
-          <Button onClick={this.handleLogout}  style={{borderRadius: 0}} color="inherit" className={`${classes.sidebarText} fullWidth`} >
-          <Icon style={{marginRight:"5px"}}>power_settings_new</Icon> {open && "Logout"} 
-          </Button>
-          </div>
         </Drawer>
       </div>
     );

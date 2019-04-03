@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
 import { Grid, Table, TableHead, TableRow, TableCell, TableBody, 
         TablePagination, IconButton,
-        TableFooter,
-        Badge,
-        Chip} from '@material-ui/core';
+        Chip,
+        Tooltip} from '@material-ui/core';
 import { Card } from '../Components/styledComponents';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { styles } from '../../scss/style';
-import { red, teal, green, blue, amber, grey } from '@material-ui/core/colors';
-import { ActionsIcon } from '../Components';
+import { red, teal, blue, amber, grey } from '@material-ui/core/colors';
 import { connect } from 'react-redux';
 import FulfillModal from './FulfillModal';
 import Media from "react-media";
+import { BikerIcon,  DeliveredIcon, } from '../Components';
 
 
 
@@ -46,7 +45,16 @@ class BikerShipment extends  Component {
             rowsPerPage: 10,
             modalOpen: false,
             itemIndex: null,
-            isMobile:''
+            itemName:'',
+            isMobile:'',
+            isPickup: false
+        }
+    }
+
+    componentDidMount(){
+        console.log('.eab')
+        if(this.props.userInfo.role !== 'biker') {
+          this.props.history.push('./dashboard')
         }
     }
     handleChangePage = (event, page) => {
@@ -59,21 +67,28 @@ class BikerShipment extends  Component {
 
 
     render () {
-        const { page, rowsPerPage, modalOpen, itemIndex, isMobile } = this.state
-        const {shipments} = this.props;
+        const { page, rowsPerPage, modalOpen, itemIndex, itemName, isMobile, isPickup } = this.state
+        const {shipments, classes} = this.props;
         return (
             <div>
             <Media query="(max-width: 992px)" onChange={matches => this.setState({isMobile: matches})}/>
             <Grid container justify="center" spacing={24}>
             <Grid item xs={12}>
             <Card>
-            <Table>
-            <TableHead>
+            <h2 className={classes.cardHeader}>Shipments</h2>
+            
+            {
+                shipments.length ?
+                <div>
+                <Table>
+                <TableHead>
             <TableRow>
             <TableCell  padding="checkbox">S/N</TableCell>
             <TableCell padding="checkbox">Item</TableCell>
             {!isMobile && <TableCell>Origin</TableCell>}
             {!isMobile && <TableCell>Destination</TableCell>}
+            {!isMobile && <TableCell>Pick Up Date</TableCell>}
+            {!isMobile && <TableCell>Delivery Date</TableCell>}
             <TableCell align="center" padding="checkbox">Status</TableCell>
             <TableCell padding="checkbox">Actions</TableCell>
             </TableRow>
@@ -86,16 +101,25 @@ class BikerShipment extends  Component {
                 <TableCell padding="checkbox">{item.item}</TableCell>
                 {!isMobile && <TableCell>{item.origin}</TableCell>}
                 {!isMobile && <TableCell>{item.destination}</TableCell> }
+                {!isMobile && <TableCell>{item.pickupDate}</TableCell> }
+                {!isMobile && <TableCell>{item.deliverDate}</TableCell> }
                 <TableCell align="center" padding="checkbox">{setStatus(item.status)}</TableCell>
                 <TableCell padding="checkbox">
-                <IconButton onClick={()=>this.setState({modalOpen:true, itemIndex:index+(page*rowsPerPage)})}>
-                <ActionsIcon color={grey[700]}/>
+               { (item.status === 'assigned' || item.status === 'picked_up') &&
+               <Tooltip title={item.status === 'assigned' ? 'Pick Up' : 'Deliver'} placement="bottom">
+                <IconButton 
+                onClick={()=>this.setState({
+                    modalOpen:true, itemIndex:index+(page*rowsPerPage), 
+                    itemName:item.item, isPickup: item.status==='assigned'
+                })}>
+                {item.status === 'assigned' ? <BikerIcon color={grey[700]} sidebarIcon/> : <DeliveredIcon color={grey[700]} sidebarIcon/>}
                 </IconButton>
-                </TableCell>
+                </Tooltip> 
+               }
+               </TableCell>
                 </TableRow>
             ))}
             </TableBody>
-            
             </Table>
             <TablePagination
                 rowsPerPageOptions={[ 10, 25]}
@@ -113,11 +137,16 @@ class BikerShipment extends  Component {
                 onChangePage={this.handleChangePage}
                 onChangeRowsPerPage={this.handleChangeRowsPerPage}
                 />
+                </div> :
+                <h5>No Shipments</h5>
+            }
+            
+            
             </Card>
             </Grid>
             </Grid>
             <FulfillModal open={modalOpen} handleClose={()=>this.setState({modalOpen:false})}
-                itemIndex={itemIndex}/>
+                itemIndex={itemIndex} itemName={itemName} isPickup={isPickup}/>
             </div>
         )
     }
@@ -128,7 +157,8 @@ BikerShipment.propTypes = {
   };
   const mapStateToProps = (state) => {
     return {
-      shipments: state.saveUser.shipments
+      shipments: state.saveUser.shipments,
+      userInfo: state.saveUser.userInfo
     }
 }
 

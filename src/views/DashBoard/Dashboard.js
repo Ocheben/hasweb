@@ -7,15 +7,22 @@ import {blue, teal, amber, red, grey} from '@material-ui/core/colors/'
 import {styles} from '../../scss/style';
 import { Bar, Doughnut} from 'react-chartjs-2';
 import { connect } from 'react-redux';
-
+import Media from "react-media";
 class Dashboard extends  Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      isMobile: ''
+    }
+  }
   componentDidMount(){
     if(this.props.userInfo.role !== 'admin') {
       this.props.history.push('./bikershipment')
     }
   }
     render () {
-        const {classes} = this.props
+        const {classes, dashStatus} = this.props
+        const {isMobile} = this.state
         const barData = {
             labels: ['Delivered', 'Picked Up', 'Assigned', 'Waiting'],
             datasets: [
@@ -46,7 +53,7 @@ class Dashboard extends  Component {
                   amber[500],
                   red[700],
                 ],
-                data: [20, 10, 7, 14],
+                data: [dashStatus.delivered, dashStatus.picked_up, dashStatus.assigned, dashStatus.waiting],
               },
             ],
           };
@@ -61,7 +68,7 @@ class Dashboard extends  Component {
                 ticks: {
                   beginAtZero: true,
                   min: 0,
-                  max: 30
+                  max: dashStatus.shipments
                 }
               }]
             },
@@ -69,64 +76,42 @@ class Dashboard extends  Component {
               display: false,
             },
           }
-
-        // const doughnut = {
-        //   labels: [
-        //     'Early',
-        //     'Absent',
-        //     'Late'
-        //   ],
-        //   datasets: [
-        //     {
-    
-        //       data: [early, absent, late],
-        //       backgroundColor: [
-        //         brandSuccess,
-        //         brandDanger,
-        //         brandWarning
-        //       ],
-        //       hoverBackgroundColor: [
-        //         brandSuccess,
-        //         brandDanger,
-        //         brandWarning
-        //       ],
-        //     }],
-        // };
-      
       
         return (
             <div>
+            <Media query="(max-width: 992px)" onChange={matches => this.setState({isMobile: matches})}/>
             <Grid container spacing={24}>
-            <Grid item xs={3}>
+            <Grid item xs={isMobile? 12: 3}>
             <Card button color={grey[500]}>
             <ShipmentIcon float="right" color={grey[700]}/>
             <h3 className={classes.cardButtonHeader}>Shipments</h3>
-            <h1 className={classes.cardButtonValue}>50</h1>
+            <h1 className={classes.cardButtonValue}>{dashStatus.shipments}</h1>
             </Card>
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={isMobile? 12: 3}>
             <Card button color={blue[700]}>
             <DeliveredIcon float="right" color={grey[700]}/>
             <h3 className={classes.cardButtonHeader}>Delivered</h3>
-            <h1 className={classes.cardButtonValue}>20</h1>
+            <h1 className={classes.cardButtonValue}>{dashStatus.delivered}</h1>
             </Card>
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={isMobile? 12: 3}>
             <Card button color={teal[600]}>
             <BikerIcon float="right" color={grey[700]}/>
             <h3 className={classes.cardButtonHeader}>Picked Up</h3>
-            <h1 className={classes.cardButtonValue}>30</h1>
+            <h1 className={classes.cardButtonValue}>{dashStatus.picked_up}</h1>
             </Card>
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={isMobile? 12: 3}>
             <Card button color={amber[300]}>
             <AssignedIcon float="right" color={grey[700]}/>
             <h3 className={classes.cardButtonHeader}>Assigned</h3>
-            <h1 className={classes.cardButtonValue}>35</h1>
+            <h1 className={classes.cardButtonValue}>{dashStatus.assigned}</h1>
             </Card>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={isMobile? 12: 6}>
             <Card>
+            <h2 className={classes.cardHeader}>Bar Chart</h2>
             <Bar
                 data={barData}
                 width={100}
@@ -135,8 +120,9 @@ class Dashboard extends  Component {
                 />
             </Card>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={isMobile? 12: 6}>
             <Card>
+            <h2 className={classes.cardHeader}>Doughnut Chart</h2>
             <Doughnut data={barData} className="animated fadeIn" />
             </Card>
             </Grid>
@@ -148,7 +134,8 @@ class Dashboard extends  Component {
 
 const mapStateToProps = (state) => {
   return {
-    userInfo: state.saveUser.userInfo
+    userInfo: state.saveUser.userInfo,
+    dashStatus: state.saveUser.dashStatus
   }
 }
 

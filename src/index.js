@@ -14,7 +14,7 @@ import 'typeface-roboto';
 
 import { PersistGate } from 'redux-persist/lib/integration/react';
 import createEncryptor from 'redux-persist-transform-encrypt';
-import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
+// import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 
 const encryptor = createEncryptor({
     secretKey: 'necoUser',

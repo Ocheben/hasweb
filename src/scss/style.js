@@ -83,7 +83,7 @@ export const styles = theme => ({
         },
       },
       buttonProgress: {
-        color: green[500],
+        color: blue[700],
         position: 'absolute',
         top: '50%',
         left: '50%',
@@ -162,7 +162,7 @@ export const styles = theme => ({
       drawerToggle: {
         display: 'flex',
         alignItems: 'center',
-        padding: '0 8px',
+        padding: '0 4px 0 4px',
         ...theme.mixins.toolbar,
         justifyContent: 'flex-end',
         color:"#fff"
@@ -199,19 +199,8 @@ export const styles = theme => ({
         },
       },
       drawerHeaderClosed: {
-        // transform: "scale(0)"
         transform: "translateX(-100px)"
       },
-      // content: {
-      //   flexGrow: 1,
-      //   padding: theme.spacing.unit * 3,
-      //   paddingTop: theme.spacing.unit * 5,
-      //   transition: theme.transitions.create('margin', {
-      //     easing: theme.transitions.easing.sharp,
-      //     duration: theme.transitions.duration.leavingScreen,
-      //   }),
-      //   marginLeft: -drawerWidth,
-      // },
       content: {
         flexGrow: 1,
         padding: theme.spacing.unit * 3,
@@ -248,6 +237,13 @@ export const styles = theme => ({
         whiteSpace: "nowrap",
         overflow: "hidden",
         textOverflow: "ellipsis",
+      },
+      sidebarAvatarText: {
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        width:"100%",
+        textTransform: "none",
+        whiteSpace: "nowrap",
       },
       logoAvatar: {
         margin: 10,
@@ -425,13 +421,20 @@ export const styles = theme => ({
         color: grey[700],
         margin: 0
       },
+      cardHeader:{
+        float:"left",
+        color: grey[700],
+        marginBottom:"1em"
+      },
       cardButtonValue: {
         padding:"0 1rem",
         right: 0,
         bottom: 0,
         position:"absolute"
+      },
+      modalInput: {
+        width:"100%",
+        margin: "0.5em 0"
       }
-      
-      
 })
 

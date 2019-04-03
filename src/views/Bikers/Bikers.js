@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
-import { Grid, Table, TableHead, TableRow, TableCell, TableBody, 
-        TablePagination, IconButton,
-        TableFooter,
-        Badge,
-        Chip} from '@material-ui/core';
+import { Table, TableHead, TableRow, TableCell, TableBody, 
+        TablePagination, } from '@material-ui/core';
 import { Card } from '../Components/styledComponents';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { styles } from '../../scss/style';
-import { red, teal, green, blue, amber, grey } from '@material-ui/core/colors';
-import { ActionsIcon } from '../Components';
 import { connect } from 'react-redux';
 
 
@@ -40,11 +35,12 @@ class Bikers extends  Component {
 
 
     render () {
-        const { page, rowsPerPage, modalOpen, itemIndex } = this.state
-        const {bikers} = this.props;
+        const { page, rowsPerPage } = this.state
+        const {bikers, classes} = this.props;
         return (
             <div>
             <Card>
+            <h2 className={classes.cardHeader}>Bikers</h2>
             <Table>
             <TableHead>
             <TableRow>

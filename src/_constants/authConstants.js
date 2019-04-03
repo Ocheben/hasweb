@@ -6,5 +6,7 @@ export const AUTHACTIONS = {
 }
 
 export const USERACTIONS = {
-    ASSIGN: 'ASSIGN'
+    ASSIGN: 'ASSIGN',
+    PICKUP: 'PICKUP',
+    DELIVER: 'DELIVER'
 }

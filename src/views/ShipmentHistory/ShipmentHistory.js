@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
-import { Grid, Table, TableHead, TableRow, TableCell, TableBody, 
-        TablePagination, IconButton,
-        TableFooter,
-        Badge,
-        Chip} from '@material-ui/core';
+import {Table, TableHead, TableRow, TableCell, TableBody, 
+        TablePagination, Chip} from '@material-ui/core';
 import { Card } from '../Components/styledComponents';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { styles } from '../../scss/style';
-import { red, teal, green, blue, amber, grey } from '@material-ui/core/colors';
-import { ActionsIcon } from '../Components';
+import { red, teal, blue, amber, } from '@material-ui/core/colors';
 import { connect } from 'react-redux';
+import Media from "react-media";
 
 
 
@@ -43,7 +40,8 @@ class History extends  Component {
             page:0,
             rowsPerPage: 10,
             modalOpen: false,
-            itemIndex: null
+            itemIndex: null,
+            isMobile:''
         }
     }
 
@@ -62,50 +60,44 @@ class History extends  Component {
     };
 
     render () {
-        const { page, rowsPerPage, modalOpen, itemIndex } = this.state
-        const {shipments} = this.props;
+        const { page, rowsPerPage, isMobile } = this.state
+        const {shipments, classes} = this.props;
+        const deliveredList = shipments.filter(item=> item.status === 'delivered')
         return (
             <div>
+            <Media query="(max-width: 992px)" onChange={matches => this.setState({isMobile: matches})}/>
             <Card>
+            <h2 className={classes.cardHeader}>History</h2>
             <Table>
             <TableHead>
             <TableRow>
             <TableCell  padding="checkbox">S/N</TableCell>
             <TableCell>Item</TableCell>
-            <TableCell>Origin</TableCell>
-            <TableCell>Destination</TableCell>
+            {!isMobile &&<TableCell>Origin</TableCell>}
+            {!isMobile &&<TableCell>Destination</TableCell>}
             <TableCell>Assignee</TableCell>
             <TableCell align="center" padding="checkbox">Status</TableCell>
-            <TableCell padding="checkbox">Actions</TableCell>
             </TableRow>
             </TableHead>
             <TableBody>
-            {shipments.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((item, index)=> {
-                    if(item.status === 'delivered'){
-                        return ( 
+            {deliveredList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((item, index)=>
                         <TableRow key={item.id}>
                         <TableCell  padding="checkbox">{index+1 + (page*rowsPerPage)}</TableCell>
                         <TableCell>{item.item}</TableCell>
-                        <TableCell>{item.origin}</TableCell>
-                        <TableCell>{item.destination}</TableCell>
+                        {!isMobile &&<TableCell>{item.origin}</TableCell>}
+                        {!isMobile &&<TableCell>{item.destination}</TableCell>}
                         <TableCell>{item.assignee}</TableCell>
                         <TableCell align="center" padding="checkbox">{setStatus(item.status)}</TableCell>
-                        <TableCell padding="checkbox">
-                        <IconButton onClick={()=>this.setState({modalOpen:true, itemIndex:index+(page*rowsPerPage)})}>
-                        <ActionsIcon color={grey[700]}/>
-                        </IconButton>
-                        </TableCell>
                         </TableRow>
                         )}
-                })}
             </TableBody>
             
             </Table>
             <TablePagination
                 rowsPerPageOptions={[ 10, 25]}
                 component="div"
-                count={shipments.length}
+                count={deliveredList.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 backIconButtonProps={{

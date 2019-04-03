@@ -1,16 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import {withRouter} from 'react-router-dom';
-import { Row, Col } from 'reactstrap';
 import Media from "react-media";
 import logo from '../../../assets/img/logo.png'
 import { styles } from '../../../scss/style'
-import { Grid, Card, CardHeader, CardContent, CardActions, MenuItem, TextField,
-    DeleteIcon, Icon, Fab, SendIcon, ArrowForward, Avatar, Slide, CircularProgress,
-    green, CheckIcon, InputAdornment, LocalPhone, Visibility, VisibilityOff, IconButton,
-    Grow, classNames, Button, Fade, Link } from '../../../mui'
-import {phoneValidation} from '../../../_helpers'
+import { Grid, Card, CardContent, CardActions, TextField, CircularProgress,
+   InputAdornment, LocalPhone, Visibility, VisibilityOff, IconButton,
+    Grow, classNames, Button} from '../../../mui'
 import {getData, URLS, METHODS} from '../../../_services'
 import { connect } from 'react-redux';
 import {saveUser} from '../../../_actions/authAction'
@@ -85,7 +81,7 @@ class Login extends Component {
       }
     render() {
         const { classes } = this.props;
-        const {isMobile, loading, showPassword, formValidity, formInputs,
+        const {isMobile, loading, showPassword, formInputs,
                 alertMessage, alertOpen} = this.state
         const gridSize = isMobile ? 12 : 4
         const completeForm = Object.values(formInputs).every(value=>value !== '')
@@ -105,12 +101,12 @@ class Login extends Component {
                 matches => this.setState({isMobile: matches})
             }/>
             <Grid  container style={{height:"100vh"}}  justify="center" alignItems="center" >
-            <Grid item xs={gridSize} justify="center" style={{textAlign:"center"}}>
+            <Grid item xs={gridSize} justify="center" style={{textAlign:"center", margin:"0 1em"}}>
             <Grow in>
             <Card className={classes.formCard} id="myCheck">
             <img className={classes.logoImg} alt="" src={logo}/>
             <h5>Log in to your account</h5>
-            <CardContent>
+            <CardContent style={{padding:isMobile ? '16px 0' : '16px'}}>
             <div className={classes.formSpacing}>
             <TextField
             id="outlined-adornment-weight"

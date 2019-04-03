@@ -11,7 +11,8 @@ import Typography from '@material-ui/core/Typography';
 import {styles} from '../../scss/style';
 import {TextField, MenuItem} from '@material-ui/core';
 import { connect } from 'react-redux';
-import {assignBiker} from '../../_actions/authAction'
+import {assignBiker} from '../../_actions/authAction';
+import Media from "react-media";
 
 const DialogTitle = withStyles(theme => ({
   root: {
@@ -60,7 +61,8 @@ class AssignModal extends React.Component {
       this.state = {
         open: false,
         bikerInfo: {},
-        bikername: ''
+        bikername: '',
+        isMobile:''
       };
       this.dispatch = props.dispatch
   }
@@ -102,8 +104,8 @@ class AssignModal extends React.Component {
   }
 
   render() {
-    const {classes, userInfo, bikers} = this.props
-    const {bikerInfo} = this.state
+    const {classes, bikers} = this.props
+    const {bikerInfo, isMobile} = this.state
     const textFieldProps = {
         InputLabelProps:{
             classes: {
@@ -121,6 +123,7 @@ class AssignModal extends React.Component {
     }
     return (
       <div>
+      <Media query="(max-width: 992px)" onChange={matches => this.setState({isMobile: matches})}/>
         <Dialog
         open={this.props.open}
         onClose={this.handleClose}
@@ -130,7 +133,7 @@ class AssignModal extends React.Component {
           <DialogTitle id="customized-dialog-title" onClose={this.handleClose}>
             Modal title
           </DialogTitle>
-          <DialogContent style={{margin:"0 5em"}}>
+          <DialogContent style={{margin:isMobile ? "0 1em" : "0 5em"}}>
             <Typography gutterBottom>
               Please select a biker to assign this shipment to.
             </Typography>

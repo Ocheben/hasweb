@@ -48,13 +48,13 @@ class DefaultLayout extends Component {
             <div className={classes.root}>
             <Media query="(max-width: 992px)" onChange={matches => this.setState({isMobile: matches})}/>
             <CssBaseline />
-            <DefaultSidebar handleDrawerOpen={this.handleDrawerOpen} handleDrawerClose={this.handleDrawerClose} open={drawerOpen} fixSidebar={this.fixSidebar} ></DefaultSidebar>
+            {userInfo.role === 'admin' && <DefaultSidebar handleDrawerOpen={this.handleDrawerOpen} handleDrawerClose={this.handleDrawerClose} open={drawerOpen} fixSidebar={this.fixSidebar} ></DefaultSidebar>}
             <DefaultHeader handleDrawerOpen={this.handleDrawerOpen} open={drawerOpen} sidebarFixed={sidebarFixed}/>
             <Container 
             className={classNames({
                 [classes.contentShift]: sidebarFixed,
                 [classes.content]: !isMobile,
-                [classes.mobileContent]: isMobile
+                [classes.mobileContent]: isMobile ? true : userInfo.role !== 'admin'
               })}
             //    className={classes.content} 
                fluid>

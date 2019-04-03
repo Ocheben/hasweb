@@ -38,8 +38,8 @@ import PeopleOutlined from '@material-ui/icons/PeopleOutlined';
 import IconButton from '@material-ui/core/IconButton';
 // import PowerIcon from '@material-ui/core/PowerSettings';
 import Grow from '@material-ui/core/Grow';
-// import { MuiPickersUtilsProvider, TimePicker, DatePicker } from 'material-ui-pickers';
-// import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider, TimePicker, DatePicker } from 'material-ui-pickers';
+import DateFnsUtils from '@date-io/date-fns';
 import classNames from 'classnames';
 import Button from '@material-ui/core/Button';
 import Drawer from '@material-ui/core/Drawer';
@@ -69,4 +69,5 @@ export { AppBar, ListSubheader, List, ListItem, ListItemIcon, ListItemText, Coll
         Avatar, Slide, Fade, CircularProgress, green, grey, blue, CheckIcon, InputAdornment, LocalPhone,
         Visibility, VisibilityOff, IconButton, Grow, classNames, Button, Drawer, Divider, ChevronLeftIcon, ChevronRightIcon,
         MailIcon, Toolbar, Typography, CssBaseline, DashboardIcon, ReceiptIcon, PeopleOutlined, Link,
-        Radio, RadioGroup, FormHelperText, FormControlLabel, FormControl, FormLabel, NotesIcon}
+        Radio, RadioGroup, FormHelperText, FormControlLabel, FormControl, FormLabel, NotesIcon,
+        MuiPickersUtilsProvider, TimePicker, DatePicker, DateFnsUtils, PeopleIcon}

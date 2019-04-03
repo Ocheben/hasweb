@@ -9,9 +9,11 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import {styles} from '../../scss/style';
-import {TextField, MenuItem} from '@material-ui/core';
+import {Grid} from '@material-ui/core';
 import { connect } from 'react-redux';
-import {assignBiker} from '../../_actions/authAction'
+import {pickUp, deliver} from '../../_actions/authAction';
+import { DateFnsUtils, MuiPickersUtilsProvider, DatePicker, TimePicker, } from '../../mui';
+import Media from "react-media";
 
 const DialogTitle = withStyles(theme => ({
   root: {
@@ -61,8 +63,14 @@ class FulfillModal extends React.Component {
         open: false,
         bikerInfo: {},
         bikername: '',
-        action: '',
-        actionTime:''
+        date: new Date(),
+        time: new Date(),
+        formInputs: {
+            date: new Date().toDateString(), 
+            time: new Date().toLocaleTimeString(),
+            status: this.props.isPickup ? 'picked_up' : 'delivered'
+        },
+        isMobile:''
       };
       this.dispatch = props.dispatch
   }
@@ -86,20 +94,36 @@ class FulfillModal extends React.Component {
   }
 
   handleSubmit=()=> {
-    const {bikerInfo} = this.state
+    const {date, time} = this.state.formInputs
     const data = {
       index: this.props.itemIndex, 
-      bikerid: bikerInfo.bikerid, 
-      status:"assigned",
-      assignee: bikerInfo.name
+      date: date, 
+      time: time,
+      status: this.props.isPickup ? 'picked_up' : 'delivered'
     };
-    this.dispatch(assignBiker(data))
+    if (this.props.isPickup) {
+        this.dispatch(pickUp(data))
+    }
+    else {
+        this.dispatch(deliver(data))
+    }
+    
     this.handleClose()
   }
 
+  handleDateChange = (date, name) => {
+    this.setState({
+        [name]: date,
+        formInputs: {
+            ...this.state.formInputs,
+            [name]: name === 'date' ? date.toDateString() : date.toLocaleTimeString()
+        } 
+    });
+  };
+
   render() {
-    const {classes, userInfo} = this.props
-    const {bikerInfo, action, actionTime} = this.state
+    const {classes,  isPickup, itemName} = this.props
+    const {date, time, isMobile} = this.state
     const textFieldProps = {
         InputLabelProps:{
             classes: {
@@ -116,7 +140,9 @@ class FulfillModal extends React.Component {
         }
     }
     return (
+    <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <div>
+      <Media query="(max-width: 992px)" onChange={matches => this.setState({isMobile: matches})}/>
         <Dialog
         open={this.props.open}
         onClose={this.handleClose}
@@ -124,20 +150,39 @@ class FulfillModal extends React.Component {
           maxWidth="sm" fullWidth 
         >
           <DialogTitle id="customized-dialog-title" onClose={this.handleClose}>
-            Modal title
+            {isPickup ? `Pick up ${itemName}`: `Deliver ${itemName}`}
           </DialogTitle>
-          <DialogContent style={{margin:"0 5em"}}>
+          <DialogContent style={{margin:"0 1em"}}>
             <Typography gutterBottom>
-              Confirm {action} at {actionTime}
+              Add Time Stamp
             </Typography>
+            <Grid container spacing={24}>
+            <Grid item xs={isMobile ? 12 : 6}>
+            <DatePicker margin="normal" label={isPickup ? 'Pick up Date' : 'Delivery Date'} value={date} 
+                onChange={(date)=>this.handleDateChange(date, 'date')} variant="outlined"
+                className={classes.modalInput} {...textFieldProps}
+                
+            />
+            </Grid>
+          <Grid item xs={isMobile ? 12 : 6}>
+          <TimePicker variant="outlined"
+          className={classes.modalInput} {...textFieldProps}
+            margin="normal"
+            label={isPickup ? 'Pick up Time' : 'Delivery Time'}
+            value={time}
+            onChange={(date)=>this.handleDateChange(date, 'time')}
+          />
+          </Grid>  
+          </Grid>
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleSubmit} color="primary">
-              Assign Biker
+              Confirm {isPickup?'Pick Up' : 'Delivery'}
             </Button>
           </DialogActions>
         </Dialog>
       </div>
+      </MuiPickersUtilsProvider>
     );
   }
 }

@@ -1,18 +1,16 @@
 import React, { Component } from 'react';
-import { Grid, Table, TableHead, TableRow, TableCell, TableBody, 
-        TablePagination, IconButton,
-        TableFooter,
-        Badge,
-        Chip} from '@material-ui/core';
+import { Table, TableHead, TableRow, TableCell, TableBody, 
+        TablePagination, IconButton, Chip,
+        Tooltip} from '@material-ui/core';
 import { Card } from '../Components/styledComponents';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { styles } from '../../scss/style';
-import { red, teal, green, blue, amber, grey } from '@material-ui/core/colors';
-import { ActionsIcon } from '../Components';
+import { red, teal, blue, amber, grey } from '@material-ui/core/colors';
 import { connect } from 'react-redux';
-import AssignModal from './AssignModal'
-import { stat } from 'fs';
+import AssignModal from './AssignModal';
+import { AssignedIcon } from '../Components';
+import Media from "react-media";
 
 
 
@@ -45,7 +43,8 @@ class Shipments extends  Component {
             page:0,
             rowsPerPage: 10,
             modalOpen: false,
-            itemIndex: null
+            itemIndex: null,
+            isMobile: ''
         }
     }
     componentDidMount(){
@@ -65,19 +64,21 @@ class Shipments extends  Component {
 
 
     render () {
-        const { page, rowsPerPage, modalOpen, itemIndex } = this.state
-        const {shipments} = this.props;
+        const { page, rowsPerPage, modalOpen, itemIndex, isMobile } = this.state
+        const {shipments, classes} = this.props;
         return (
             <div>
-            <Card>
-            <Table>
-            <TableHead>
+            <Media query="(max-width: 992px)" onChange={matches => this.setState({isMobile: matches})}/>
+            <Card style={{overflowX:"scroll", width:"100%"}}>
+            <h2 className={classes.cardHeader}>Shipments</h2>
+            <Table >
+            <TableHead style={{overflowX:"auto"}}>
             <TableRow>
             <TableCell  padding="checkbox">S/N</TableCell>
             <TableCell>Item</TableCell>
-            <TableCell>Origin</TableCell>
-            <TableCell>Destination</TableCell>
-            <TableCell>Assignee</TableCell>
+            {!isMobile &&<TableCell>Origin</TableCell>}
+            {!isMobile &&<TableCell>Destination</TableCell>}
+            {!isMobile &&<TableCell>Assignee</TableCell>}
             <TableCell align="center" padding="checkbox">Status</TableCell>
             <TableCell padding="checkbox">Actions</TableCell>
             </TableRow>
@@ -88,14 +89,18 @@ class Shipments extends  Component {
                 <TableRow key={item.id}>
                 <TableCell  padding="checkbox">{index+1 + (page*rowsPerPage)}</TableCell>
                 <TableCell>{item.item}</TableCell>
-                <TableCell>{item.origin}</TableCell>
-                <TableCell>{item.destination}</TableCell>
-                <TableCell>{item.assignee}</TableCell>
+                {!isMobile &&<TableCell>{item.origin}</TableCell>}
+                {!isMobile &&<TableCell>{item.destination}</TableCell>}
+                {!isMobile &&<TableCell>{item.assignee}</TableCell>}
                 <TableCell align="center" padding="checkbox">{setStatus(item.status)}</TableCell>
                 <TableCell padding="checkbox">
+                {item.status === 'waiting' &&
+                <Tooltip title="Assign to Biker" placement="bottom">
                 <IconButton onClick={()=>this.setState({modalOpen:true, itemIndex:index+(page*rowsPerPage)})}>
-                <ActionsIcon color={grey[700]}/>
+                <AssignedIcon color={grey[700]} sidebarIcon/>
                 </IconButton>
+                </Tooltip>
+                }
                 </TableCell>
                 </TableRow>
             ))}
