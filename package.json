@@ -22,7 +22,8 @@
     "redux-persist-transform-encrypt": "^2.0.1",
     "redux-thunk": "^2.3.0",
     "styled-components": "^4.2.0",
-    "typeface-roboto": "0.0.54"
+    "typeface-roboto": "0.0.54",
+    "webpack": "^4.28.3"
   },
   "scripts": {
     "start": "react-scripts start",
