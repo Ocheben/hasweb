@@ -25,7 +25,6 @@ class DefaultLayout extends Component {
         if(!this.props.userInfo.isLoggedin) {
           this.props.history.push('/login')
         }
-        console.log(this.props.userInfo)
     
     }
     fixSidebar = () => {

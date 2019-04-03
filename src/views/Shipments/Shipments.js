@@ -48,7 +48,6 @@ class Shipments extends  Component {
         }
     }
     componentDidMount(){
-        console.log('.eab')
         if(this.props.userInfo.role !== 'admin') {
           this.props.history.push('./bikershipment')
         }

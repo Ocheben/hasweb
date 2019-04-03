@@ -54,8 +54,6 @@ class Login extends Component {
         const {email, password} = this.state.formInputs
         this.setState({loading:true})
         const data = {"email": email, "password":password}
-        // this.dispatch(saveUser({phone, password}))
-        console.log(data)
         const response = await getData(METHODS.LOGIN, URLS.LOGIN, data);
         
         if (response.status === 200){
@@ -70,7 +68,6 @@ class Login extends Component {
             loading:false
           })
         }
-        console.log(response)
       };
 
 

@@ -66,7 +66,6 @@ const deliverObjectInArray=(array, action)=> {
 const saveUser = (state = initState, action)=>{
     switch(action.type) {
         case LOGIN: 
-        console.log("login")
         return {
             ...state,
             userInfo: {...state.userInfo, ...action.payload},

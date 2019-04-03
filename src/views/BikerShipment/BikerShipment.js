@@ -52,7 +52,6 @@ class BikerShipment extends  Component {
     }
 
     componentDidMount(){
-        console.log('.eab')
         if(this.props.userInfo.role !== 'biker') {
           this.props.history.push('./dashboard')
         }

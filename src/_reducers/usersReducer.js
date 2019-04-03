@@ -10,7 +10,6 @@ const initState = {
 const { ASSIGN } = USERACTIONS
 
 const assign = (state = initState, action)=>{
-    console.log(state)
     switch(action.type) {
         case ASSIGN: 
         return state.shipments.map((item, index) => {
