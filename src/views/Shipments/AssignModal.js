@@ -147,7 +147,7 @@ class AssignModal extends React.Component {
             <MenuItem value={null}>
               <em>None</em>
             </MenuItem>
-            {bikers === Array && bikers.map(option => (
+            {bikers.map(option => (
               <MenuItem key={option.bikerid} value={option}>
               {option.name}
               </MenuItem>

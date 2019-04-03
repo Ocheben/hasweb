@@ -38,7 +38,7 @@ const saveUser = (state = initState, action)=>{
             ...state,
             userInfo: {...state.userInfo, ...action.payload},
             shipments: action.payload.shipments,
-            bikers: action.payload.bikers 
+            bikers: action.payload.bikers ? action.payload.bikers : []
         }
 
         case LOGOUT:

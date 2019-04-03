@@ -54,7 +54,7 @@ class Bikers extends  Component {
             </TableRow>
             </TableHead>
             <TableBody>
-            {bikers === Array && bikers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            {bikers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((item, index)=> (
                 <TableRow key={item.bikerid}>
                 <TableCell  padding="checkbox">{index+1 + (page*rowsPerPage)}</TableCell>
