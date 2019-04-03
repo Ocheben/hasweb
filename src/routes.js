@@ -1,10 +1,10 @@
-
+import React from 'react';
 import Loadable from 'react-loadable';
 import { DefaultLayout } from './container/DefaultLayout';
-// import CompanyRegistration from './views/CompanyRegistration/CompanyRegistration';
+import { CircularProgress } from './mui'
 
 const Loading =()=> {
-    return ("Loading...")
+    return (<CircularProgress size={24} className="loading" />)
 }
 
 const Dashboard = Loadable ({

@@ -1,5 +1,4 @@
-import styled, {keyframes} from 'styled-components'
-import {green, grey} from '@material-ui/core/colors'
+import styled from 'styled-components'
 
 export const Card = styled.div`
 position: relative;

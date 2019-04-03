@@ -5,7 +5,7 @@ import Media from "react-media";
 import logo from '../../../assets/img/logo.png'
 import { styles } from '../../../scss/style'
 import { Grid, Card, CardContent, CardActions, TextField, CircularProgress,
-   InputAdornment, LocalPhone, Visibility, VisibilityOff, IconButton,
+   InputAdornment, Visibility, VisibilityOff, IconButton,
     Grow, classNames, Button, Icon} from '../../../mui'
 import {getData, URLS, METHODS} from '../../../_services'
 import { connect } from 'react-redux';
@@ -113,7 +113,6 @@ class Login extends Component {
             variant="outlined"
             className={classes.loginInput}
             label="Email" name="email"
-            // error={("phone" in formValidity) && !formValidity.phone}
             onChange={this.handleChange}
             InputProps={{
               endAdornment: <InputAdornment position="end"><Icon className={classes.inputIcon}>mail_outline</Icon></InputAdornment>,
