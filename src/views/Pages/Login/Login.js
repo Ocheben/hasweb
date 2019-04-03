@@ -113,7 +113,7 @@ class Login extends Component {
             onChange={this.handleChange}
             InputProps={{
               endAdornment: <InputAdornment position="end"><Icon className={classes.inputIcon}>mail_outline</Icon></InputAdornment>,
-              type: "tel",
+              type: "email",
               classes: {
                 input: classes.size,
               },
