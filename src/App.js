@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { HashRouter, Route, Switch} from 'react-router-dom';
 import './App.css';
 import { DefaultLayout } from './container/DefaultLayout';
-import { Login,  } from './views/Pages';
+import { Login, Register } from './views/Pages';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import {blue} from './mui'
 const theme = createMuiTheme({
@@ -64,6 +64,7 @@ class App extends Component {
       <HashRouter>
       <Switch>
       <Route exact path="/login" name="Login" component={Login} />
+      <Route exact path="/register" name="Register" component={Register} />
       <Route path="/" name="Home" component={DefaultLayout} />
       </Switch>
       </HashRouter>

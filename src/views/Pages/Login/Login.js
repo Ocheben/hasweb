@@ -6,12 +6,12 @@ import logo from '../../../assets/img/logo.png'
 import { styles } from '../../../scss/style'
 import { Grid, Card, CardContent, CardActions, TextField, CircularProgress,
    InputAdornment, Visibility, VisibilityOff, IconButton,
-    Grow, classNames, Button, Icon} from '../../../mui'
+    Grow, classNames, Button, Icon, Fade} from '../../../mui'
 import {getData, URLS, METHODS} from '../../../_services'
 import { connect } from 'react-redux';
 import {saveUser} from '../../../_actions/authAction'
 import Alert from '../../Components/Alert';
-
+// import { Fade } from '@material-ui/core/'
 
 class Login extends Component {
     constructor(props) {
@@ -56,14 +56,14 @@ class Login extends Component {
         const data = {"email": email, "password":password}
         const response = await getData(METHODS.LOGIN, URLS.LOGIN, data);
         
-        if (response.status === 200){
-          this.dispatch(saveUser({...response, isLoggedin:true}));
+        if (response.meta.status === 200){
+          this.dispatch(saveUser({...response.data, isLoggedin:true}));
           this.props.history.push('/dashboard')
         }
         else  {
           this.setState({
             alertOpen:true,
-            alertMessage: response.status===404 ? 'Invalid username or password' :
+            alertMessage: response.meta.status===406 ? response.meta.message :
              'You are not connected to the internet',
             loading:false
           })
@@ -159,6 +159,16 @@ class Login extends Component {
             </CardActions>
               </Card>
               </Grow>
+              <Fade in>
+              <div className="formFooter">
+              <Button color="inherit" className={classes.button} onClick={() => this.props.history.push('/register')} >
+              Sign Up
+              </Button>
+              <Button color="inherit" className={classes.button} >
+              Forgot Password
+              </Button>
+              </div>
+              </Fade>
             </Grid>
             </Grid>
             <Alert error message={alertMessage} handleClose={this.handleAlertClose} open={alertOpen}/>

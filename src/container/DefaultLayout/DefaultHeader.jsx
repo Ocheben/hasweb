@@ -59,7 +59,7 @@ class DefaultHeader extends React.Component {
                 <img className={classes.appBarLogo} alt="" src={logo}/>
                 <div >
                 <Typography variant="h5" color="inherit" noWrap>
-                {isMobile ? 'CE' : 'Cologne Express'}
+                {isMobile ? 'HAS' : 'Hire A Service'}
                 </Typography>
                 </div>
                 <div className={classes.grow} />

@@ -15,9 +15,9 @@ import { BikerIcon, HistoryIcon, ShipmentIcon, HomeIcon } from '../../views/Comp
 
 const menuList = [
     {name: "Dashboard", icon: <HomeIcon color="#fff" sidebarIcon/>, link:"/dashboard"},
-    {name: "Shipments", icon: <ShipmentIcon color="#fff" sidebarIcon/>, link:"/shipments"},
+    {name: "Orders", icon: <ShipmentIcon color="#fff" sidebarIcon/>, link:"/shipments"},
     {name: "History", icon: <HistoryIcon color="#fff" sidebarIcon/>, link:"/shipmenthistory"},
-    {name: "Bikers", icon: <BikerIcon color="#fff" sidebarIcon/>, link:"/bikers"}
+    {name: "Bids", icon: <BikerIcon color="#fff" sidebarIcon/>, link:"/bikers"}
 ]
 
 class DefaultSidebar extends React.Component {
