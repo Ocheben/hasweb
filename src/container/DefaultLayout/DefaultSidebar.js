@@ -1,36 +1,40 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import {withRouter} from 'react-router-dom';
-import { styles} from '../../scss/style';
-import Media from "react-media";
-import {classNames, Icon, Avatar, CssBaseline,
-          List, ListItem, ListItemIcon, ListItemText, Drawer, IconButton,
-          Typography, MenuIcon, NotesIcon} from '../../mui';
-import avatar from '../../assets/img/avatar.png';
+import { withRouter } from 'react-router-dom';
+import Media from 'react-media';
 import { connect } from 'react-redux';
-import {removeUser} from '../../_actions/authAction'
-import { BikerIcon, HistoryIcon, ShipmentIcon, HomeIcon } from '../../views/Components';
+import { styles } from '../../scss/style';
+import {
+  classNames, Icon, Avatar, CssBaseline,
+  List, ListItem, ListItemIcon, ListItemText, Drawer, IconButton,
+  Typography, MenuIcon, NotesIcon
+} from '../../mui';
+import avatar from '../../assets/img/avatar.png';
+import { removeUser } from '../../_actions/authAction';
+import {
+  BikerIcon, HistoryIcon, ShipmentIcon, HomeIcon
+} from '../../views/Components';
 
 
 const menuList = [
-    {name: "Dashboard", icon: <HomeIcon color="#fff" sidebarIcon/>, link:"/dashboard"},
-    {name: "Orders", icon: <ShipmentIcon color="#fff" sidebarIcon/>, link:"/shipments"},
-    {name: "History", icon: <HistoryIcon color="#fff" sidebarIcon/>, link:"/shipmenthistory"},
-    {name: "Bids", icon: <BikerIcon color="#fff" sidebarIcon/>, link:"/bikers"}
-]
+  { name: 'Dashboard', icon: <HomeIcon color="#fff" sidebarIcon />, link: '/dashboard' },
+  { name: 'Jobs', icon: <ShipmentIcon color="#fff" sidebarIcon />, link: '/jobs' },
+  { name: 'History', icon: <HistoryIcon color="#fff" sidebarIcon />, link: '/shipmenthistory' },
+  { name: 'Bids', icon: <BikerIcon color="#fff" sidebarIcon />, link: '/bikers' }
+];
 
 class DefaultSidebar extends React.Component {
   constructor(props) {
-      super(props);
-      this.state = {
-        open: false,
-        isMobile:'',
-        sidebarFixed: false,
-        openNest: '',
-        prevNest: '',
-      };
-      this.dispatch = props.dispatch
+    super(props);
+    this.state = {
+      open: false,
+      isMobile: '',
+      sidebarFixed: false,
+      openNest: '',
+      prevNest: '',
+    };
+    this.dispatch = props.dispatch;
   }
 
   handleLogout = () => {
@@ -39,12 +43,12 @@ class DefaultSidebar extends React.Component {
   }
 
   fixSidebar = () => {
-    this.setState({sidebarFixed: !this.state.sidebarFixed})
+    this.setState({ sidebarFixed: !this.state.sidebarFixed });
     this.props.fixSidebar();
   }
 
   onMouseLeave = () => {
-    this.setState((prevState)=> ({
+    this.setState(prevState => ({
       openNest: '',
       prevNest: prevState.openNest
     }));
@@ -52,25 +56,30 @@ class DefaultSidebar extends React.Component {
   }
 
   onMouseEnter = () => {
-    this.setState(prevState=>({openNest:prevState.prevNest}));
+    this.setState(prevState => ({ openNest: prevState.prevNest }));
     this.props.handleDrawerOpen();
   }
 
   render() {
-    const { classes,  open, handleDrawerClose, history, userInfo } = this.props;
-    const { isMobile, sidebarFixed, } = this.state
-    
+    const {
+      classes, open, handleDrawerClose, history, userInfo
+    } = this.props;
+    const { isMobile, sidebarFixed, } = this.state;
+
     return (
       <div className={classes.root}>
-      <Media query="(max-width: 992px)" onChange={matches => this.setState({isMobile: matches})
-        }/>
+        <Media
+          query="(max-width: 992px)"
+          onChange={matches => this.setState({ isMobile: matches })
+        }
+        />
         <CssBaseline />
         <Drawer
           anchor="left"
           open={open}
           onMouseEnter={!sidebarFixed ? this.onMouseEnter : undefined}
           onMouseLeave={!sidebarFixed ? this.onMouseLeave : undefined}
-          variant={isMobile ? "temporary" : "permanent"}
+          variant={isMobile ? 'temporary' : 'permanent'}
           className={classNames(classes.drawer, {
             [classes.drawerOpen]: open,
             [classes.drawerClose]: !open,
@@ -83,31 +92,36 @@ class DefaultSidebar extends React.Component {
           }}
         >
           <div className={classes.drawerToggle}>
-          {
-            isMobile ?
-            <IconButton onClick={handleDrawerClose} style={{color:"#fff"}}>
-              <Icon>close</Icon>
-            </IconButton>
-            : <IconButton onClick={this.fixSidebar} style={{color:"#fff"}}>
-            {sidebarFixed ? <NotesIcon color="inherit" /> : <MenuIcon color="inherit"/>}
-          </IconButton>
+            {
+            isMobile
+              ? (
+                <IconButton onClick={handleDrawerClose} style={{ color: '#fff' }}>
+                  <Icon>close</Icon>
+                </IconButton>
+              )
+              : (
+                <IconButton onClick={this.fixSidebar} style={{ color: '#fff' }}>
+                  {sidebarFixed ? <NotesIcon color="inherit" /> : <MenuIcon color="inherit" />}
+                </IconButton>
+              )
           }
-            
+
           </div>
-{
-          <div className={classNames(classes.drawerHeader,{
-            [classes.drawerHeaderClosed]: !open
-          })}>
-          <Avatar alt="User Avatar" src={avatar} className={classes.userAvatar}  />
-          <Typography variant="subtitle2" className={classes.sidebarAvatarText} color="inherit">{userInfo.name}</Typography>
-          <Typography variant="caption" className={classes.sidebarAvatarText} color="inherit" gutterBottom>{userInfo.email}</Typography>
-          </div>
+          {
+            <div className={classNames(classes.drawerHeader, {
+              [classes.drawerHeaderClosed]: !open
+            })}
+            >
+              <Avatar alt="User Avatar" src={avatar} className={classes.userAvatar} />
+              <Typography variant="subtitle2" className={classes.sidebarAvatarText} color="inherit">{userInfo.name}</Typography>
+              <Typography variant="caption" className={classes.sidebarAvatarText} color="inherit" gutterBottom>{userInfo.email}</Typography>
+            </div>
 }
-          <List >
-            {menuList.map((item, index) => (
-              <ListItem button selected={history.location.pathname === item.link ? true : false} onClick={()=>this.props.history.push(item.link)}  >
-                <ListItemIcon  style={{color:"#fff", margin:0}}>{item.icon}</ListItemIcon>
-                {<ListItemText primary={item.name}   classes={{primary: classes.sidebarText}}/>}
+          <List>
+            {menuList.map(item => (
+              <ListItem button selected={history.location.pathname === item.link} onClick={() => this.props.history.push(item.link)}>
+                <ListItemIcon style={{ color: '#fff', margin: 0 }}>{item.icon}</ListItemIcon>
+                {<ListItemText primary={item.name} classes={{ primary: classes.sidebarText }} />}
               </ListItem>
             ))}
           </List>
@@ -121,10 +135,8 @@ DefaultSidebar.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
 };
-const mapStateToProps = (state) => {
-  return {
-    userInfo: state.saveUser.userInfo
-  }
-}
+const mapStateToProps = state => ({
+  userInfo: state.saveUser.userInfo
+});
 
 export default withRouter(connect(mapStateToProps)(withStyles(styles, { withTheme: true })(DefaultSidebar)));

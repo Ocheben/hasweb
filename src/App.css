@@ -45,3 +45,8 @@ body{
     transform: rotate(360deg);
   }
 }
+
+p, h3, h1, h2, h4, h5 {
+  width: fit-content;
+  text-align: left;
+}
