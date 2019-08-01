@@ -20,6 +20,7 @@ import {
 const menuList = [
   { name: 'Dashboard', icon: <HomeIcon color="#fff" sidebarIcon />, link: '/dashboard' },
   { name: 'Jobs', icon: <ShipmentIcon color="#fff" sidebarIcon />, link: '/jobs' },
+  { name: 'My Jobs', icon: <ShipmentIcon color="#fff" sidebarIcon />, link: '/myjobs' },
   { name: 'History', icon: <HistoryIcon color="#fff" sidebarIcon />, link: '/shipmenthistory' },
   { name: 'Bids', icon: <BikerIcon color="#fff" sidebarIcon />, link: '/bikers' }
 ];

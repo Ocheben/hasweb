@@ -26,6 +26,32 @@ export const JobDetail = (props) => {
     title, desc, price, duration
   } = props;
   return (
-    <ItemCard height={'30vh'}></ItemCard>
-  )
-}
+    <ItemCard height="30vh" />
+  );
+};
+
+export const BidItem = (props) => {
+  const {
+    title, desc, price, duration, onClick
+  } = props;
+  return (
+    <ItemCard horizontal onClick={onClick} vmargin="1em" button curved>
+      <Content flex={3}>
+        <h3>{title}</h3>
+        <p>{desc}</p>
+      </Content>
+      <Content flex={1}>
+        <h5>
+          {price}
+          {' '}
+          in
+          {' '}
+          {duration}
+          {' '}
+          day
+          {duration > 1 && 's'}
+        </h5>
+      </Content>
+    </ItemCard>
+  );
+};

@@ -1,6 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import styled from 'styled-components';
 import { TextField, Button } from '@material-ui/core';
+import { blue, grey } from '@material-ui/core/colors';
 
 export const Card = styled.div`
 position: relative;
@@ -53,7 +54,7 @@ export const ItemCard = styled.div`
     padding: ${props => (props.vpadding ? props.vpadding : 0)} ${props => (props.hpadding ? props.hpadding : '2rem')};
     margin: ${props => (props.vmargin ? props.vmargin : 0)} ${props => (props.hmargin ? props.hmargin : 0)};
     border: ${props => (props.button ? '1px solid #e9e9e9' : 'none')};
-    border-radius: ${props => (props.button ? 0 : '0.3rem')};
+    border-radius: ${props => (props.curved ? '0.3rem' : 0)};
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
     transition: all 0.3s cubic-bezier(.25,.8,.25,1);
     justify-content: flex-start;
@@ -87,4 +88,11 @@ export const StyledInput = styled(TextField)`
 
 export const StyledButton = styled(Button)`
     width: ${props => (props.width ? props.width : '100%')};
+`;
+
+export const TabButton = styled(Button)`
+    border: none;
+    border-bottom: 1.5px solid ${props => (props.active ? blue[700] : 'transparent')};
+    border-radius: 0;
+    color: ${props => (props.active ? blue[700] : grey[700])};
 `;

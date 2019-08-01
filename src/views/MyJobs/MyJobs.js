@@ -3,7 +3,7 @@ import { Container, Content } from '../Components/styledComponents';
 import { ListItem } from '../Components/Components';
 import { getData, URLS } from '../../_services';
 
-const Jobs = (props) => {
+const MyJobs = (props) => {
   const [jobList, setJobList] = useState([]);
   useEffect(() => {
     const getJobList = async () => {
@@ -30,7 +30,7 @@ const Jobs = (props) => {
               desc={item.job_desc}
               price={item.price}
               duration={item.duration.days}
-              onClick={() => props.history.push({ pathname: `/jobs/${item.job_id}`, state: item })}
+              onClick={() => props.history.push({ pathname: `/myjobs/${item.job_id}`, state: item })}
             />
           ))
       }
@@ -39,4 +39,4 @@ const Jobs = (props) => {
   );
 };
 
-export default Jobs;
+export default MyJobs;

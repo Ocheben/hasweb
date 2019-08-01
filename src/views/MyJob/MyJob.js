@@ -13,7 +13,7 @@ import { getData, URLS } from '../../_services';
 import { styles } from '../../scss/style';
 import { ListItem, BidItem } from '../Components/Components';
 
-const Job = (props) => {
+const MyJob = (props) => {
   const { match: { params: { job_id } }, classes } = props;
   const [jobState, setJobState] = useState({
     job: {},
@@ -146,81 +146,6 @@ const Job = (props) => {
                 <p>{job_desc}</p>
               </Content>
             </ItemCard>
-            <ItemCard height="auto" vmargin="2rem" curved>
-              <Content display="flex" horizontal justify="space-between">
-                <h2>Place a Bid on this Job</h2>
-              </Content>
-              <StyledHr />
-              <Content>
-                <p>You will be able to edit your bid until the project is awarded to someone.</p>
-                <h4>Bid Details </h4>
-                <Content display="flex" horizontal justify="space-between" vmargin="1em">
-                  <StyledInput
-                    variant="outlined"
-            // onChange={this.handleChange}
-                    label="Price"
-                    name="price"
-                    type="number"
-                    width="40%"
-                    onChange={e => handleChange(e)}
-                    InputProps={{
-                      classes: {
-                        input: classNames(classes.size),
-                      },
-                      startAdornment: (
-                        <InputAdornment position="start">
-                &#8358;
-                        </InputAdornment>
-                      )
-                    }}
-                    {...textFieldProps}
-                  />
-                  <StyledInput
-                    variant="outlined"
-                    onChange={e => handleChange(e)}
-                    label="Duration"
-                    name="duration"
-                    type="number"
-                    width="40%"
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="start">days</InputAdornment>
-                      ),
-                      classes: {
-                        input: classNames(classes.size),
-                      },
-                    }}
-                    {...textFieldProps}
-                  />
-                </Content>
-                <StyledInput
-                  variant="outlined"
-                  onChange={e => handleChange(e)}
-                  label="Message"
-                  name="message"
-                  type="text"
-                  multiline
-                  rows="4"
-                  width="100%"
-                  InputProps={{
-                    classes: {
-                      input: classNames(classes.size),
-                    },
-                  }}
-                  {...textFieldProps}
-                />
-                <Content vmargin="2em">
-                  <StyledButton
-                    variant="contained"
-                    color="primary"
-                    width="50%"
-                    onClick={() => handleSubmit()}
-                  >
-        Place Bid
-                  </StyledButton>
-                </Content>
-              </Content>
-            </ItemCard>
           </Content>
           <Content width="25%">
             <ItemCard height="50vh" curved>
@@ -229,7 +154,7 @@ const Job = (props) => {
               </Content>
               <StyledHr />
             </ItemCard>
-            <ItemCard height="30vh" vmargin="2rem" curved/>
+            <ItemCard height="30vh" vmargin="2rem" curved />
           </Content>
         </Container>
       </Fade>
@@ -256,4 +181,4 @@ const Job = (props) => {
   );
 };
 
-export default withStyles(styles)(Job);
+export default withStyles(styles)(MyJob);
