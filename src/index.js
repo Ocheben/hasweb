@@ -1,4 +1,5 @@
 import React from 'react';
+import * as Sentry from '@sentry/browser';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
@@ -15,6 +16,7 @@ import { PersistGate } from 'redux-persist/lib/integration/react';
 import createEncryptor from 'redux-persist-transform-encrypt';
 // import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 
+Sentry.init({dsn: "https://c5553768945946de845390fd807d4be6@sentry.io/1521245"});
 const encryptor = createEncryptor({
     secretKey: 'necoUser',
     onError: function(error) {
