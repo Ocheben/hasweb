@@ -7,7 +7,7 @@ export const URLS = {
   LOGIN: 'https://has-server.herokuapp.com/login',
   GETJOBS: 'http://has-server.herokuapp.com/jobs/user/7',
   GETJOB: 'http://has-server.herokuapp.com/jobs/',
-  GETJOBBIDS: 'http://127.0.0.1:5000/bids/job/',
+  GETJOBBIDS: 'http://has-server.herokuapp.com/bids/job/',
   POSTBID: 'http://has-server.herokuapp.com/bids/'
   // GETJOBS: 'http://127.0.0.1:5000/jobs/user/7',
   // GETJOB: 'http://127.0.0.1:5000/jobs/'
