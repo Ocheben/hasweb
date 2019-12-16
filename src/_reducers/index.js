@@ -1,12 +1,14 @@
-import{ combineReducers } from 'redux'
-import saveUser  from './authReducer'
+import { combineReducers } from 'redux';
+import saveUser from './authReducer';
+import uiReducer from './uiReducer';
 
-const reducers ={ 
- saveUser,
-}
+const reducers = {
+  saveUser,
+  uiReducer
+};
 
 const rootReducer = combineReducers({
-    ...reducers
-})
+  ...reducers
+});
 
-export default rootReducer
+export default rootReducer;

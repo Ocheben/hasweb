@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Content } from '../Components/styledComponents';
-import { ListItem } from '../Components/Components';
+import { IconButton } from '@material-ui/core';
+import { blue } from '@material-ui/core/colors';
+import {
+  Container, Content, ItemCard, ListItem, FilterIcon, Input
+} from '../Components';
 import { getData, URLS } from '../../_services';
+
 
 const Jobs = (props) => {
   const [jobList, setJobList] = useState([]);
@@ -20,8 +24,18 @@ const Jobs = (props) => {
     getJobList();
   }, []);
   return (
-    <Container justify="center">
-      <Content width="90%">
+    <Container id="container" align="center" justify="center">
+      <Content width="80%" shadow>
+        <ItemCard height="4em" horizontal list>
+          <Content flex={3} display="flex" justify="center">
+            <Input placeholder="Search" variant="outlined" />
+          </Content>
+          <Content display="flex" justify="center" align="flex-end" flex={2}>
+            <IconButton>
+              <FilterIcon color={blue[700]} />
+            </IconButton>
+          </Content>
+        </ItemCard>
         {
           jobList.slice(0).reverse().map(item => (
             <ListItem

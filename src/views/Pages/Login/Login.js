@@ -13,6 +13,7 @@ import {
 import { getData, URLS, METHODS } from '../../../_services';
 import { saveUser } from '../../../_actions/authAction';
 import Alert from '../../Components/Alert';
+import { SText } from '../../Components';
 // import { Fade } from '@material-ui/core/'
 
 class Login extends Component {
@@ -109,7 +110,7 @@ class Login extends Component {
                 <Grow in>
                   <Card className={classes.formCard} id="myCheck">
                     <img className={classes.logoImg} alt="" src={logo} />
-                    <h5>Log in to your account</h5>
+                    <SText color="#333333" size="20px" weight="700" align="center" style={{ width: '100%' }}>Log in to your account</SText>
                     <CardContent style={{ padding: isMobile ? '16px 0' : '16px' }}>
                       <div className={classes.formSpacing}>
                         <TextField

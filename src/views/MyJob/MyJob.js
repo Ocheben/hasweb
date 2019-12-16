@@ -1,13 +1,13 @@
 /* eslint-disable camelcase */
 import React, { useState, useEffect } from 'react';
 import {
-  TextField, InputAdornment, Fade, Button
+  TextField, InputAdornment, Fade, Button, Icon
 } from '@material-ui/core';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import {
-  Container, ItemCard, Content, StyledHr, SH, StyledInput, StyledButton, TabButton
+  Container, ItemCard, Content, StyledHr, SH, StyledInput, StyledButton, TabButton, SDiv, SText
 } from '../Components/styledComponents';
 import { getData, URLS } from '../../_services';
 import { styles } from '../../scss/style';
@@ -115,15 +115,17 @@ const MyJob = (props) => {
   console.log(jobState.job)
   return (
     <div>
-      <Content display="flex" vmargin="0.5em" align="flex-start">
-        <ButtonGroup>
-        <TabButton active={!showBids} onClick={() => toggleShowBids(false)}>Details</TabButton>
-        <TabButton active={showBids} onClick={() => toggleShowBids(true)}>Proposals</TabButton>
-      </ButtonGroup>
+      <Content display="flex" vmargin="0.5em" align="center">
+        <Content display="flex" align="flex-start" width="80%">
+          <ButtonGroup>
+            <TabButton active={!showBids} onClick={() => toggleShowBids(false)}>Details</TabButton>
+            <TabButton active={showBids} onClick={() => toggleShowBids(true)}>Proposals</TabButton>
+          </ButtonGroup>
+        </Content>
       </Content>
       <Fade in={!showBids} unmountOnExit mountOnEnter timeout={500}>
-        <Container horizontal justify="space-between">
-          <Content width="70%">
+        <Container align="center">
+          <Content width="80%">
             <ItemCard height="30vh" curved>
               <Content display="flex" horizontal justify="space-between">
                 <h2>{job_title}</h2>
@@ -141,20 +143,63 @@ const MyJob = (props) => {
                   </SH>
                 </Content>
               </Content>
-              <StyledHr />
+              <StyledHr style={{ margin: '0 -2rem' }} />
               <Content>
                 <p>{job_desc}</p>
               </Content>
             </ItemCard>
           </Content>
-          <Content width="25%">
-            <ItemCard height="50vh" curved>
-              <Content display="flex" horizontal justify="space-between">
-                <h4>About the Employer</h4>
-              </Content>
-              <StyledHr />
-            </ItemCard>
-            <ItemCard height="30vh" vmargin="2rem" curved />
+          {
+        //   <Content width="25%">
+        //   <ItemCard height="40vh" curved>
+        //     <Content display="flex" horizontal justify="space-between">
+        //       <h2>About the Employer</h2>
+        //     </Content>
+        //     <StyledHr style={{ margin: '0 -2rem' }} />
+        //     <SDiv tmargin="0.5em">
+        //       <SDiv flex horizontal justify="flex-start" vmargin="0.5em">
+        //         <Icon style={{ marginRight: '0.5rem', color: '#444444' }}>near_me</Icon>
+        //         <SText color="#999999" size="17px">Abuja</SText>
+        //       </SDiv>
+        //       <SDiv flex horizontal justify="flex-start" vmargin="0.5em">
+        //         <Icon style={{ marginRight: '0.5rem', color: '#444444' }}>personal_video</Icon>
+        //         <SText color="#666666" size="17px">2 Projects completed</SText>
+        //       </SDiv>
+        //       <SDiv flex horizontal justify="flex-start" vmargin="0.5em">
+        //         <Icon style={{ marginRight: '0.5rem', color: '#444444' }}>person</Icon>
+        //         <SDiv flex horizontal justify="flex-start">
+        //           <Icon style={{ color: '#666666' }}>star</Icon>
+        //           <Icon style={{ color: '#666666' }}>star</Icon>
+        //           <Icon style={{ color: '#666666' }}>star</Icon>
+        //           <Icon style={{ color: '#666666' }}>star</Icon>
+        //           <Icon style={{ color: '#666666' }}>star_border</Icon>
+        //         </SDiv>
+        //       </SDiv>
+        //       <SDiv flex horizontal justify="flex-start" vmargin="0.5em">
+        //         <Icon style={{ marginRight: '0.5rem', color: '#444444' }}>access_time</Icon>
+        //         <SText color="#666666" size="17px">Member since Oct 16, 2019</SText>
+        //       </SDiv>
+        //     </SDiv>
+        //   </ItemCard>
+        //   <ItemCard height="30vh" vmargin="2rem" curved />
+        // </Content>
+          }
+          <SDiv width="80%" flex tmargin="3em">
+            <SText color="#444444" size="24px" weight="700">Bids</SText>
+          </SDiv>
+          <Content width="80%">
+            {
+          jobState.bids.slice(0).reverse().map(item => (
+            <BidItem
+              key={item.bid_id}
+              title={`${item.firstname} ${item.lastname}`}
+              desc={item.message}
+              price={item.price}
+              duration={item.duration}
+              onClick={() => props.history.push({ pathname: `/myjobs/bids/${item.bid_id}`, state: item })}
+            />
+          ))
+      }
           </Content>
         </Container>
       </Fade>
@@ -169,6 +214,7 @@ const MyJob = (props) => {
               desc={item.message}
               price={item.price}
               duration={item.duration}
+              onClick={() => props.history.push({ pathname: `/myjobs/bids/${item.bid_id}`, state: item })}
             />
           ))
       }

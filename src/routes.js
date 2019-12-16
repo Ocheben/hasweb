@@ -30,6 +30,16 @@ const MyJob = Loadable({
   loading: Loading
 });
 
+const Profile = Loadable({
+  loader: () => import('./views/Profile/Profile'),
+  loading: Loading
+});
+
+const Bid = Loadable({
+  loader: () => import('./views/Bid/Bid'),
+  loading: Loading
+});
+
 // const Shipments = Loadable ({
 //     loader: () => import('./views/Shipments/Shipments'),
 //     loading: Loading,
@@ -60,6 +70,8 @@ const routes = [
   { path: '/jobs/:job_id', exact: true, name: 'Job', component: Job },
   { path: '/myjobs', exact: true, name: 'Jobs', component: MyJobs },
   { path: '/myjobs/:job_id', exact: true, name: 'My Job', component: MyJob },
+  { path: '/myjobs/bids/:bid_id', exact: true, name: 'My Job', component: Bid },
+  { path: '/profile', exact: true, name: 'Profile', component: Profile },
   // {path:'/shipments', name:"Shipments", component:Shipments },
   // {path:'/shipmenthistory', name:"History", component:ShipmentHistory },
   // {path:'/bikers', name:"Bikers", component:Bikers },

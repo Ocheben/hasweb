@@ -1,14 +1,14 @@
 /* eslint-disable camelcase */
 import React, { useState, useEffect } from 'react';
 import {
-  TextField, InputAdornment, Fade, Button
+  TextField, InputAdornment, Fade, Button, Icon
 } from '@material-ui/core';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import {
-  Container, ItemCard, Content, StyledHr, SH, StyledInput, StyledButton, TabButton
-} from '../Components/styledComponents';
+  Container, ItemCard, Content, StyledHr, SH, StyledInput, StyledButton, TabButton, SDiv, SText
+} from '../Components';
 import { getData, URLS } from '../../_services';
 import { styles } from '../../scss/style';
 import { ListItem, BidItem } from '../Components/Components';
@@ -117,9 +117,9 @@ const Job = (props) => {
     <div>
       <Content display="flex" vmargin="0.5em" align="flex-start">
         <ButtonGroup>
-        <TabButton active={!showBids} onClick={() => toggleShowBids(false)}>Details</TabButton>
-        <TabButton active={showBids} onClick={() => toggleShowBids(true)}>Proposals</TabButton>
-      </ButtonGroup>
+          <TabButton active={!showBids} onClick={() => toggleShowBids(false)}>Details</TabButton>
+          <TabButton active={showBids} onClick={() => toggleShowBids(true)}>Proposals</TabButton>
+        </ButtonGroup>
       </Content>
       <Fade in={!showBids} unmountOnExit mountOnEnter timeout={500}>
         <Container horizontal justify="space-between">
@@ -141,7 +141,7 @@ const Job = (props) => {
                   </SH>
                 </Content>
               </Content>
-              <StyledHr />
+              <StyledHr style={{ margin: '0 -2rem' }} />
               <Content>
                 <p>{job_desc}</p>
               </Content>
@@ -150,7 +150,7 @@ const Job = (props) => {
               <Content display="flex" horizontal justify="space-between">
                 <h2>Place a Bid on this Job</h2>
               </Content>
-              <StyledHr />
+              <StyledHr style={{ margin: '0 -2rem' }}/>
               <Content>
                 <p>You will be able to edit your bid until the project is awarded to someone.</p>
                 <h4>Bid Details </h4>
@@ -223,13 +223,60 @@ const Job = (props) => {
             </ItemCard>
           </Content>
           <Content width="25%">
-            <ItemCard height="50vh" curved>
+            <ItemCard height="40vh" curved>
               <Content display="flex" horizontal justify="space-between">
-                <h4>About the Employer</h4>
+                <h2>About the Employer</h2>
               </Content>
-              <StyledHr />
+              <StyledHr style={{ margin: '0 -2rem' }} />
+              <SDiv tmargin="0.5em">
+                <SDiv flex horizontal justify="flex-start" vmargin="0.5em">
+                  <Icon style={{ marginRight: '0.5rem', color: '#444444' }}>near_me</Icon>
+                  <SText color="#999999" size="17px">Abuja</SText>
+                </SDiv>
+                <SDiv flex horizontal justify="flex-start" vmargin="0.5em">
+                  <Icon style={{ marginRight: '0.5rem', color: '#444444' }}>personal_video</Icon>
+                  <SText color="#666666" size="17px">2 Projects completed</SText>
+                </SDiv>
+                <SDiv flex horizontal justify="flex-start" vmargin="0.5em">
+                  <Icon style={{ marginRight: '0.5rem', color: '#444444' }}>person</Icon>
+                  <SDiv flex horizontal justify="flex-start">
+                    <Icon style={{ color: '#666666' }}>star</Icon>
+                    <Icon style={{ color: '#666666' }}>star</Icon>
+                    <Icon style={{ color: '#666666' }}>star</Icon>
+                    <Icon style={{ color: '#666666' }}>star</Icon>
+                    <Icon style={{ color: '#666666' }}>star_border</Icon>
+                  </SDiv>
+                </SDiv>
+                <SDiv flex horizontal justify="flex-start" vmargin="0.5em">
+                  <Icon style={{ marginRight: '0.5rem', color: '#444444' }}>access_time</Icon>
+                  <SText color="#666666" size="17px">Member since Oct 16, 2019</SText>
+                </SDiv>
+              </SDiv>
             </ItemCard>
-            <ItemCard height="30vh" vmargin="2rem" curved/>
+            <ItemCard height="30vh" vmargin="2rem" curved>
+              <Content display="flex" horizontal justify="space-between">
+                <h2>Bid Summary</h2>
+              </Content>
+              <StyledHr style={{ margin: '0 -2rem' }} />
+              <SDiv tmargin="0.5em">
+                <SDiv flex horizontal justify="space-between">
+                  <SText color="#444444" weight="500" size="17px">Total Bids</SText>
+                  <SText color="#999999" size="17px">15</SText>
+                </SDiv>
+                <SDiv flex horizontal justify="space-between">
+                  <SText color="#444444" weight="500" size="17px">Bids Placed</SText>
+                  <SText color="#999999" size="17px">5</SText>
+                </SDiv>
+                <SDiv flex horizontal justify="space-between">
+                  <SText color="#444444" weight="500" size="17px">Bids Left</SText>
+                  <SText color="#999999" size="17px">10</SText>
+                </SDiv>
+                <SDiv flex horizontal justify="space-between">
+                  <SText color="#444444" weight="500" size="17px">Bids Accepted</SText>
+                  <SText color="#999999" size="17px">4</SText>
+                </SDiv>
+              </SDiv>
+            </ItemCard>
           </Content>
         </Container>
       </Fade>

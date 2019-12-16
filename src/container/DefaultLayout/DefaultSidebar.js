@@ -17,14 +17,6 @@ import {
 } from '../../views/Components';
 
 
-const menuList = [
-  { name: 'Dashboard', icon: <HomeIcon color="#fff" sidebarIcon />, link: '/dashboard' },
-  { name: 'Jobs', icon: <ShipmentIcon color="#fff" sidebarIcon />, link: '/jobs' },
-  { name: 'My Jobs', icon: <ShipmentIcon color="#fff" sidebarIcon />, link: '/myjobs' },
-  { name: 'History', icon: <HistoryIcon color="#fff" sidebarIcon />, link: '/shipmenthistory' },
-  { name: 'Bids', icon: <BikerIcon color="#fff" sidebarIcon />, link: '/bikers' }
-];
-
 class DefaultSidebar extends React.Component {
   constructor(props) {
     super(props);
@@ -63,9 +55,20 @@ class DefaultSidebar extends React.Component {
 
   render() {
     const {
-      classes, open, handleDrawerClose, history, userInfo
+      classes, open, handleDrawerClose, history, userInfo, userType
     } = this.props;
     const { isMobile, sidebarFixed, } = this.state;
+
+    const menuList = userType === 'seller' ? [
+      { name: 'Dashboard', icon: <HomeIcon color="#fff" sidebarIcon />, link: '/dashboard' },
+      { name: 'Browse Jobs', icon: <ShipmentIcon color="#fff" sidebarIcon />, link: '/jobs' },
+      { name: 'Bids', icon: <HistoryIcon color="#fff" sidebarIcon />, link: '/shipmenthistory' },
+      { name: 'Profile', icon: <BikerIcon color="#fff" sidebarIcon />, link: '/profile' }
+    ] : [
+      { name: 'Dashboard', icon: <HomeIcon color="#fff" sidebarIcon />, link: '/dashboard' },
+      { name: 'My Jobs', icon: <ShipmentIcon color="#fff" sidebarIcon />, link: '/myjobs' },
+      { name: 'Profile', icon: <BikerIcon color="#fff" sidebarIcon />, link: '/profile' }
+    ];
 
     return (
       <div className={classes.root}>
@@ -137,7 +140,8 @@ DefaultSidebar.propTypes = {
   theme: PropTypes.object.isRequired,
 };
 const mapStateToProps = state => ({
-  userInfo: state.saveUser.userInfo
+  userInfo: state.saveUser.userInfo,
+  userType: state.uiReducer.userType
 });
 
 export default withRouter(connect(mapStateToProps)(withStyles(styles, { withTheme: true })(DefaultSidebar)));
