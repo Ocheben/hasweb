@@ -5,6 +5,9 @@ import { blue, grey } from '@material-ui/core/colors';
 import { fadeIn, noAnimation, fadeAnimation } from './keyframes';
 import { borderColor } from '@material-ui/system';
 
+export const colors = {
+  primary: blue[900]
+};
 export const Card = styled.div`
 position: relative;
 width: 100%;
@@ -33,7 +36,7 @@ export const Container = styled.div`
     display: flex;
     flex-direction: ${props => (props.horizontal ? 'row' : 'column')};
     justify-content: ${props => (props.justify ? props.justify : 'flex-start')};
-    align-items: ${props => (props.align ? props.align : 'flex-start')}
+    align-items: ${props => (props.align ? props.align : 'flex-start')};
 `;
 
 export const Content = styled.div`
@@ -119,7 +122,7 @@ export const ItemCard = styled.div`
     };
     display: flex;
     flex-direction: ${props => (props.horizontal ? 'row' : 'column')};
-    cursor: ${props => (props.button ? 'pointer' : 'auto')}
+    cursor: ${props => (props.button ? 'pointer' : 'auto')}l;
 `;
 
 
@@ -157,6 +160,7 @@ export const StyledInput = styled(TextField)`
 export const StyledButton = styled(Button)`
     && {
         width: ${props => (props.width || '100%')};
+        margin: ${props => (props.vmargin || 0)} ${props => (props.hmargin || 0)};
         height: auto;
         @media(max-width: 768px) {
           width: ${props => props.mobWidth || 'auto'};
@@ -171,4 +175,9 @@ export const TabButton = styled(Button)`
         border-radius: 0;
         color: ${props => (props.active ? blue[700] : grey[700])};
     }
+`;
+
+export const SImg = styled.img`
+  max-height: ${props => props.maxHeight || '100%'};
+  max-width: ${props => props.maxWidth || '100%'};
 `;

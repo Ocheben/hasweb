@@ -1,20 +1,25 @@
 /* eslint-disable camelcase */
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import {
-  TextField, InputAdornment, Fade, Button, Icon
+  TextField, InputAdornment, Fade, Button, Icon, CircularProgress
 } from '@material-ui/core';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import {
-  Container, ItemCard, Content, StyledHr, SH, StyledInput, StyledButton, TabButton, SDiv, SText
+  Container, ItemCard, Content, StyledHr, SH, StyledInput, StyledButton, TabButton, SDiv, SText, colors
 } from '../Components';
 import { getData, URLS } from '../../_services';
 import { styles } from '../../scss/style';
 import { ListItem, BidItem } from '../Components/Components';
+import { setAlert } from '../../_actions/userActions';
 
 const Job = (props) => {
-  const { match: { params: { job_id } }, classes } = props;
+  const { match: { params: { job_id } }, userInfo, classes, dispatch } = props;
+  const { userId } = userInfo;
+  const [loading, setLoading] = useState(true);
+  const [bidLoading, setBidLoading] = useState(false);
   const [jobState, setJobState] = useState({
     job: {},
     bids: []
@@ -23,6 +28,7 @@ const Job = (props) => {
 
   useEffect(() => {
     const getJobList = async () => {
+      setLoading(true)
       const response = await getData('GET', `${URLS.GETJOB}${job_id}`);
       console.log(response);
       const bids = await getData('GET', `${URLS.GETJOBBIDS}${job_id}`);
@@ -37,13 +43,14 @@ const Job = (props) => {
       if (response.meta.status !== 200) {
         return null;
       }
-
+      setLoading(false);
       return setJobState(j => ({
         ...j,
         job: response.data.job,
         bids: bids.data ? bids.data.bids : [],
         formInputs: {
-          userId: 7,
+          userId,
+          clientId: response.data.job.user_id,
           jobId: response.data.job.job_id,
           skillId: response.data.job.skill_id,
           skillLevel: 4,
@@ -88,15 +95,24 @@ const Job = (props) => {
   };
 
   const handleSubmit = async () => {
+    setBidLoading(true);
     const response = await getData('POST', URLS.POSTBID, jobState.formInputs);
-    if (!Object.prototype.hasOwnProperty.call(response, 'meta')) {
-      return null;
-    }
+    // if (!Object.prototype.hasOwnProperty.call(response, 'meta')) {
+    //   return null;
+    // }
 
-    if (response.meta.status !== 200) {
-      return null;
+    // if (response.meta.status !== 200) {
+    //   return null;
+    // }
+    if (response.meta && response.meta.status === 200) {
+      dispatch(setAlert({ open: true, variant: 'info', message: 'Bid posted' }));
+      console.log('successfully posted');
+      getBidsList();
+      setBidLoading(false);
+    } else {
+      dispatch(setAlert({ open: true, variant: 'error', message: 'Unable to complete' }));
+      setBidLoading(false);
     }
-    getBidsList();
     return toggleShowBids(true);
   };
   const {
@@ -115,192 +131,203 @@ const Job = (props) => {
   console.log(jobState.job)
   return (
     <div>
-      <Content display="flex" vmargin="0.5em" align="flex-start">
-        <ButtonGroup>
-          <TabButton active={!showBids} onClick={() => toggleShowBids(false)}>Details</TabButton>
-          <TabButton active={showBids} onClick={() => toggleShowBids(true)}>Proposals</TabButton>
-        </ButtonGroup>
-      </Content>
-      <Fade in={!showBids} unmountOnExit mountOnEnter timeout={500}>
-        <Container horizontal justify="space-between">
-          <Content width="70%">
-            <ItemCard height="30vh" curved>
-              <Content display="flex" horizontal justify="space-between">
-                <h2>{job_title}</h2>
-                <Content display="flex" width="30%" align="flex-end" justify="space-around" height="100%">
-                  <SH>
-&#8358;
-                    {Number(price).toLocaleString()}
-                  </SH>
-                  <SH>
-                    {duration}
-                    {' '}
-                  day
-                    {duration > 1 && 's'}
-
-                  </SH>
-                </Content>
-              </Content>
-              <StyledHr style={{ margin: '0 -2rem' }} />
-              <Content>
-                <p>{job_desc}</p>
-              </Content>
-            </ItemCard>
-            <ItemCard height="auto" vmargin="2rem" curved>
-              <Content display="flex" horizontal justify="space-between">
-                <h2>Place a Bid on this Job</h2>
-              </Content>
-              <StyledHr style={{ margin: '0 -2rem' }}/>
-              <Content>
-                <p>You will be able to edit your bid until the project is awarded to someone.</p>
-                <h4>Bid Details </h4>
-                <Content display="flex" horizontal justify="space-between" vmargin="1em">
-                  <StyledInput
-                    variant="outlined"
-            // onChange={this.handleChange}
-                    label="Price"
-                    name="price"
-                    type="number"
-                    width="40%"
-                    onChange={e => handleChange(e)}
-                    InputProps={{
-                      classes: {
-                        input: classNames(classes.size),
-                      },
-                      startAdornment: (
-                        <InputAdornment position="start">
-                &#8358;
-                        </InputAdornment>
-                      )
-                    }}
-                    {...textFieldProps}
-                  />
-                  <StyledInput
-                    variant="outlined"
-                    onChange={e => handleChange(e)}
-                    label="Duration"
-                    name="duration"
-                    type="number"
-                    width="40%"
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="start">days</InputAdornment>
-                      ),
-                      classes: {
-                        input: classNames(classes.size),
-                      },
-                    }}
-                    {...textFieldProps}
-                  />
-                </Content>
-                <StyledInput
-                  variant="outlined"
-                  onChange={e => handleChange(e)}
-                  label="Message"
-                  name="message"
-                  type="text"
-                  multiline
-                  rows="4"
-                  width="100%"
-                  InputProps={{
-                    classes: {
-                      input: classNames(classes.size),
-                    },
-                  }}
-                  {...textFieldProps}
-                />
-                <Content vmargin="2em">
-                  <StyledButton
-                    variant="contained"
-                    color="primary"
-                    width="50%"
-                    onClick={() => handleSubmit()}
-                  >
-        Place Bid
-                  </StyledButton>
-                </Content>
-              </Content>
-            </ItemCard>
+      {loading ? (
+        <SDiv flex justify="center" height="80vh" align="center">
+          <CircularProgress style={{ color: colors.primary }} size={50} />
+        </SDiv>
+      ) : (
+        <>
+          <Content display="flex" vmargin="0.5em" align="flex-start">
+            <ButtonGroup>
+              <TabButton active={!showBids} onClick={() => toggleShowBids(false)}>Details</TabButton>
+              <TabButton active={showBids} onClick={() => toggleShowBids(true)}>Proposals</TabButton>
+            </ButtonGroup>
           </Content>
-          <Content width="25%">
-            <ItemCard height="40vh" curved>
-              <Content display="flex" horizontal justify="space-between">
-                <h2>About the Employer</h2>
+          <Fade in={!showBids} unmountOnExit mountOnEnter timeout={500}>
+            <Container horizontal justify="space-between">
+              <Content width="70%">
+                <ItemCard height="30vh" curved>
+                  <Content display="flex" horizontal justify="space-between">
+                    <h2>{job_title}</h2>
+                    <Content display="flex" width="30%" align="flex-end" justify="space-around" height="100%">
+                      <SH>
+    &#8358;
+                        {Number(price).toLocaleString()}
+                      </SH>
+                      <SH>
+                        {duration}
+                        {' '}
+                      day
+                        {duration > 1 && 's'}
+
+                      </SH>
+                    </Content>
+                  </Content>
+                  <StyledHr style={{ margin: '0 -2rem' }} />
+                  <Content>
+                    <p>{job_desc}</p>
+                  </Content>
+                </ItemCard>
+                <ItemCard height="auto" vmargin="2rem" curved>
+                  <Content display="flex" horizontal justify="space-between">
+                    <h2>Place a Bid on this Job</h2>
+                  </Content>
+                  <StyledHr style={{ margin: '0 -2rem' }}/>
+                  <Content>
+                    {/* <p>You will be able to edit your bid until the project is awarded to someone.</p> */}
+                    <h4>Bid Details </h4>
+                    <Content display="flex" horizontal justify="space-between" vmargin="1em">
+                      <StyledInput
+                        variant="outlined"
+                // onChange={this.handleChange}
+                        label="Price"
+                        name="price"
+                        type="number"
+                        width="40%"
+                        onChange={e => handleChange(e)}
+                        InputProps={{
+                          classes: {
+                            input: classNames(classes.size),
+                          },
+                          startAdornment: (
+                            <InputAdornment position="start">
+                    &#8358;
+                            </InputAdornment>
+                          )
+                        }}
+                        {...textFieldProps}
+                      />
+                      <StyledInput
+                        variant="outlined"
+                        onChange={e => handleChange(e)}
+                        label="Duration"
+                        name="duration"
+                        type="number"
+                        width="40%"
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="start">days</InputAdornment>
+                          ),
+                          classes: {
+                            input: classNames(classes.size),
+                          },
+                        }}
+                        {...textFieldProps}
+                      />
+                    </Content>
+                    <StyledInput
+                      variant="outlined"
+                      onChange={e => handleChange(e)}
+                      label="Message"
+                      name="message"
+                      type="text"
+                      multiline
+                      rows="4"
+                      width="100%"
+                      InputProps={{
+                        classes: {
+                          input: classNames(classes.size),
+                        },
+                      }}
+                      {...textFieldProps}
+                    />
+                    <Content vmargin="2em">
+                      <StyledButton
+                        variant="contained"
+                        color="primary"
+                        width="50%"
+                        onClick={() => handleSubmit()}
+                      >
+                        {bidLoading ? <CircularProgress style={{ color: '#ffffff' }} size={24} /> : <SText color="#ffffff" size="14px" weight="700">Place Bid</SText>}
+                      </StyledButton>
+                    </Content>
+                  </Content>
+                </ItemCard>
               </Content>
-              <StyledHr style={{ margin: '0 -2rem' }} />
-              <SDiv tmargin="0.5em">
-                <SDiv flex horizontal justify="flex-start" vmargin="0.5em">
-                  <Icon style={{ marginRight: '0.5rem', color: '#444444' }}>near_me</Icon>
-                  <SText color="#999999" size="17px">Abuja</SText>
-                </SDiv>
-                <SDiv flex horizontal justify="flex-start" vmargin="0.5em">
-                  <Icon style={{ marginRight: '0.5rem', color: '#444444' }}>personal_video</Icon>
-                  <SText color="#666666" size="17px">2 Projects completed</SText>
-                </SDiv>
-                <SDiv flex horizontal justify="flex-start" vmargin="0.5em">
-                  <Icon style={{ marginRight: '0.5rem', color: '#444444' }}>person</Icon>
-                  <SDiv flex horizontal justify="flex-start">
-                    <Icon style={{ color: '#666666' }}>star</Icon>
-                    <Icon style={{ color: '#666666' }}>star</Icon>
-                    <Icon style={{ color: '#666666' }}>star</Icon>
-                    <Icon style={{ color: '#666666' }}>star</Icon>
-                    <Icon style={{ color: '#666666' }}>star_border</Icon>
+              <Content width="25%">
+                <ItemCard height="40vh" curved>
+                  <Content display="flex" horizontal justify="space-between">
+                    <h2>About the Employer</h2>
+                  </Content>
+                  <StyledHr style={{ margin: '0 -2rem' }} />
+                  <SDiv tmargin="0.5em">
+                    <SDiv flex horizontal justify="flex-start" vmargin="0.5em">
+                      <Icon style={{ marginRight: '0.5rem', color: '#444444' }}>near_me</Icon>
+                      <SText color="#999999" size="17px">Abuja</SText>
+                    </SDiv>
+                    <SDiv flex horizontal justify="flex-start" vmargin="0.5em">
+                      <Icon style={{ marginRight: '0.5rem', color: '#444444' }}>personal_video</Icon>
+                      <SText color="#666666" size="17px">2 Projects completed</SText>
+                    </SDiv>
+                    <SDiv flex horizontal justify="flex-start" vmargin="0.5em">
+                      <Icon style={{ marginRight: '0.5rem', color: '#444444' }}>person</Icon>
+                      <SDiv flex horizontal justify="flex-start">
+                        <Icon style={{ color: '#666666' }}>star</Icon>
+                        <Icon style={{ color: '#666666' }}>star</Icon>
+                        <Icon style={{ color: '#666666' }}>star</Icon>
+                        <Icon style={{ color: '#666666' }}>star</Icon>
+                        <Icon style={{ color: '#666666' }}>star_border</Icon>
+                      </SDiv>
+                    </SDiv>
+                    <SDiv flex horizontal justify="flex-start" vmargin="0.5em">
+                      <Icon style={{ marginRight: '0.5rem', color: '#444444' }}>access_time</Icon>
+                      <SText color="#666666" size="17px">Member since Oct 16, 2019</SText>
+                    </SDiv>
                   </SDiv>
-                </SDiv>
-                <SDiv flex horizontal justify="flex-start" vmargin="0.5em">
-                  <Icon style={{ marginRight: '0.5rem', color: '#444444' }}>access_time</Icon>
-                  <SText color="#666666" size="17px">Member since Oct 16, 2019</SText>
-                </SDiv>
-              </SDiv>
-            </ItemCard>
-            <ItemCard height="30vh" vmargin="2rem" curved>
-              <Content display="flex" horizontal justify="space-between">
-                <h2>Bid Summary</h2>
+                </ItemCard>
+                <ItemCard height="30vh" vmargin="2rem" curved>
+                  <Content display="flex" horizontal justify="space-between">
+                    <h2>Bid Summary</h2>
+                  </Content>
+                  <StyledHr style={{ margin: '0 -2rem' }} />
+                  <SDiv tmargin="0.5em">
+                    <SDiv flex horizontal justify="space-between">
+                      <SText color="#444444" weight="500" size="17px">Total Bids</SText>
+                      <SText color="#999999" size="17px">15</SText>
+                    </SDiv>
+                    <SDiv flex horizontal justify="space-between">
+                      <SText color="#444444" weight="500" size="17px">Bids Placed</SText>
+                      <SText color="#999999" size="17px">5</SText>
+                    </SDiv>
+                    <SDiv flex horizontal justify="space-between">
+                      <SText color="#444444" weight="500" size="17px">Bids Left</SText>
+                      <SText color="#999999" size="17px">10</SText>
+                    </SDiv>
+                    <SDiv flex horizontal justify="space-between">
+                      <SText color="#444444" weight="500" size="17px">Bids Accepted</SText>
+                      <SText color="#999999" size="17px">4</SText>
+                    </SDiv>
+                  </SDiv>
+                </ItemCard>
               </Content>
-              <StyledHr style={{ margin: '0 -2rem' }} />
-              <SDiv tmargin="0.5em">
-                <SDiv flex horizontal justify="space-between">
-                  <SText color="#444444" weight="500" size="17px">Total Bids</SText>
-                  <SText color="#999999" size="17px">15</SText>
-                </SDiv>
-                <SDiv flex horizontal justify="space-between">
-                  <SText color="#444444" weight="500" size="17px">Bids Placed</SText>
-                  <SText color="#999999" size="17px">5</SText>
-                </SDiv>
-                <SDiv flex horizontal justify="space-between">
-                  <SText color="#444444" weight="500" size="17px">Bids Left</SText>
-                  <SText color="#999999" size="17px">10</SText>
-                </SDiv>
-                <SDiv flex horizontal justify="space-between">
-                  <SText color="#444444" weight="500" size="17px">Bids Accepted</SText>
-                  <SText color="#999999" size="17px">4</SText>
-                </SDiv>
-              </SDiv>
-            </ItemCard>
-          </Content>
-        </Container>
-      </Fade>
-      <Fade in={showBids} unmountOnExit mountOnEnter style={{ top: 0 }}>
-        <Container horizontal justify="space-between">
-          <Content width="90%">
-            {
-          jobState.bids.slice(0).reverse().map(item => (
-            <BidItem
-              key={item.bid_id}
-              title={`${item.firstname} ${item.lastname}`}
-              desc={item.message}
-              price={item.price}
-              duration={item.duration}
-            />
-          ))
-      }
-          </Content>
-        </Container>
-      </Fade>
-
-
+            </Container>
+          </Fade>
+          <Fade in={showBids} unmountOnExit mountOnEnter style={{ top: 0 }}>
+            <Container horizontal justify="space-between">
+              <Content width="90%">
+                {
+              jobState.bids.slice(0).reverse().map(item => (
+                <BidItem
+                  key={item.bid_id}
+                  title={`${item.firstname} ${item.lastname}`}
+                  desc={item.message}
+                  price={item.price}
+                  duration={item.duration}
+                />
+              ))
+          }
+              </Content>
+            </Container>
+          </Fade>
+        </>
+      )}
     </div>
   );
 };
 
-export default withStyles(styles)(Job);
+const mapStateToProps = state => ({
+  userInfo: state.userInfo.userInfo
+});
+
+
+export default connect(mapStateToProps)(withStyles(styles)(Job));

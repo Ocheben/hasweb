@@ -8,6 +8,7 @@ import {
 import avatar from '../../assets/img/avatar.png';
 import { APIS, getData } from '../../_services';
 import { creditWallet } from '../../_actions/authAction';
+import { setAlert } from '../../_actions/userActions';
 
 const Profile = (props) => {
   const { userInfo, dispatch } = props;
@@ -29,6 +30,7 @@ const Profile = (props) => {
 
     const res = await getData(method, url, data);
     if (res.meta && res.meta.status === 200) {
+      dispatch(setAlert({ open: true, variant: 'info', message: 'Wallet succesfully credited' }));
       dispatch(creditWallet(parseInt(depositAmount, 10)));
     }
     console.log(res);
@@ -166,7 +168,7 @@ Edit
 };
 
 const mapStateToProps = state => ({
-  userInfo: state.saveUser.userInfo
+  userInfo: state.userInfo.userInfo
 });
 
 export default connect(mapStateToProps)(Profile);

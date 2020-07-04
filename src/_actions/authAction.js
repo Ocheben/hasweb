@@ -1,7 +1,7 @@
 import { AUTHACTIONS, USERACTIONS } from '../_constants';
 
-const { LOGIN, LOGOUT, CREDITWALLET } = AUTHACTIONS;
-const { ASSIGN, PICKUP, DELIVER } = USERACTIONS;
+const { LOGIN, LOGOUT, CREDITWALLET, INIT_SINGUP } = AUTHACTIONS;
+const { ASSIGN, PICKUP, DELIVER, SET_USERJOBBIDS } = USERACTIONS;
 
 export const saveUser = userData => ({
   type: LOGIN,
@@ -10,6 +10,16 @@ export const saveUser = userData => ({
 
 export const creditWallet = payload => ({
   type: CREDITWALLET,
+  payload
+});
+
+export const setJobBids = payload => ({
+  type: SET_USERJOBBIDS,
+  payload
+});
+
+export const initSignup = payload => ({
+  type: INIT_SINGUP,
   payload
 });
 

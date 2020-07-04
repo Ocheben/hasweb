@@ -40,42 +40,37 @@ const Bid = Loadable({
   loading: Loading
 });
 
-// const Shipments = Loadable ({
-//     loader: () => import('./views/Shipments/Shipments'),
-//     loading: Loading,
-// });
-
-// const ShipmentHistory = Loadable ({
-//     loader: () => import('./views/ShipmentHistory/ShipmentHistory'),
-//     loading: Loading,
-// });
-
-// const Bikers = Loadable ({
-//     loader: () => import('./views/Bikers/Bikers'),
-//     loading: Loading,
-// });
-
-// const BikerShipment = Loadable ({
-//     loader: () => import('./views/BikerShipment/BikerShipment'),
-//     loading: Loading,
-// });
-
+const Bids = Loadable({
+  loader: () => import('./views/Bids/Bids'),
+  loading: Loading
+});
 
 const routes = [
   {
     path: '/', exact: true, name: 'Home', component: DefaultLayout
   },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
-  { path: '/jobs', exact: true, name: 'Jobs', component: Jobs },
-  { path: '/jobs/:job_id', exact: true, name: 'Job', component: Job },
-  { path: '/myjobs', exact: true, name: 'Jobs', component: MyJobs },
-  { path: '/myjobs/:job_id', exact: true, name: 'My Job', component: MyJob },
-  { path: '/myjobs/bids/:bid_id', exact: true, name: 'My Job', component: Bid },
-  { path: '/profile', exact: true, name: 'Profile', component: Profile },
-  // {path:'/shipments', name:"Shipments", component:Shipments },
-  // {path:'/shipmenthistory', name:"History", component:ShipmentHistory },
-  // {path:'/bikers', name:"Bikers", component:Bikers },
-  // {path:'/bikershipment', name:"Biker Shipment", component:BikerShipment },
+  {
+    path: '/jobs', exact: true, name: 'Jobs', component: Jobs
+  },
+  {
+    path: '/jobs/:job_id', exact: true, name: 'Job', component: Job
+  },
+  {
+    path: '/myjobs', exact: true, name: 'Jobs', component: MyJobs
+  },
+  {
+    path: '/myjobs/:job_id', exact: true, name: 'My Job', component: MyJob
+  },
+  {
+    path: '/myjobs/bids/:bid_id', exact: true, name: 'My Job', component: Bid
+  },
+  {
+    path: '/bids', exact: true, name: 'Bids', component: Bids
+  },
+  {
+    path: '/profile', exact: true, name: 'Profile', component: Profile
+  },
 ];
 
 export default routes;

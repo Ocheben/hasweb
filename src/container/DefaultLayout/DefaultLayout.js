@@ -48,13 +48,13 @@ class DefaultLayout extends Component {
         <div className={classes.root}>
           <Media query="(max-width: 992px)" onChange={matches => this.setState({ isMobile: matches })} />
           <CssBaseline />
-          {userInfo.role === 'admin' && <DefaultSidebar handleDrawerOpen={this.handleDrawerOpen} handleDrawerClose={this.handleDrawerClose} open={drawerOpen} fixSidebar={this.fixSidebar} />}
+          {<DefaultSidebar handleDrawerOpen={this.handleDrawerOpen} handleDrawerClose={this.handleDrawerClose} open={drawerOpen} fixSidebar={this.fixSidebar} />}
           <DefaultHeader handleDrawerOpen={this.handleDrawerOpen} open={drawerOpen} sidebarFixed={sidebarFixed} />
           <Container
             className={classNames({
               [classes.contentShift]: sidebarFixed,
               [classes.content]: !isMobile,
-              [classes.mobileContent]: isMobile ? true : userInfo.role !== 'admin'
+              [classes.mobileContent]: isMobile
             })}
             //    className={classes.content}
             fluid
@@ -85,7 +85,7 @@ DefaultLayout.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  userInfo: state.saveUser.userInfo
+  userInfo: state.userInfo.userInfo
 });
 
 export default connect(mapStateToProps)(withStyles(styles)(DefaultLayout));

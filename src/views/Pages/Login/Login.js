@@ -12,8 +12,9 @@ import {
 } from '../../../mui';
 import { getData, URLS, METHODS } from '../../../_services';
 import { saveUser } from '../../../_actions/authAction';
-import Alert from '../../Components/Alert';
-import { SText } from '../../Components';
+import Alert from '../../Components/LocalAlert';
+import { SText, SDiv as Content, SImg } from '../../Components';
+import { setAlert } from '../../../_actions/userActions';
 // import { Fade } from '@material-ui/core/'
 
 class Login extends Component {
@@ -58,17 +59,24 @@ class Login extends Component {
         this.setState({ loading: true });
         const data = { email, password };
         const response = await getData(METHODS.LOGIN, URLS.LOGIN, data);
-
-        if (response.meta.status === 200) {
+        this.setState({ loading: false });
+        if (response.meta && response.meta.status === 200) {
           this.dispatch(saveUser({ ...response.data, isLoggedin: true }));
+          this.dispatch(setAlert({ open: true, variant: 'info', message: 'You have successfully loged in' }));
           this.props.history.push('/dashboard');
         } else {
-          this.setState({
-            alertOpen: true,
-            alertMessage: response.meta.status === 406 ? response.meta.message
-              : 'You are not connected to the internet',
-            loading: false
-          });
+          this.dispatch(setAlert({
+            open: true,
+            variant: 'error',
+            message: response.meta && response.meta.status === 406 ? response.meta.message
+              : 'There might be something wrong with your connection'
+          }));
+          // this.setState({
+          //   alertOpen: true,
+          //   alertMessage: response.meta.status === 406 ? response.meta.message
+          //     : 'You are not connected to the internet',
+          //   loading: false
+          // });
         }
       };
 
@@ -109,8 +117,13 @@ class Login extends Component {
               <Grid item xs={gridSize} justify="center" style={{ textAlign: 'center', margin: '0 1em' }}>
                 <Grow in>
                   <Card className={classes.formCard} id="myCheck">
-                    <img className={classes.logoImg} alt="" src={logo} />
-                    <SText color="#333333" size="20px" weight="700" align="center" style={{ width: '100%' }}>Log in to your account</SText>
+                    <Content justify="center" align="center" height="4em" vmargin="1em" flex>
+                      <SImg alt="" src={logo} />
+                    </Content>
+                    <Content width="70%" mobWidth="90%" bmargin="1.5em">
+                      <SText size="27px" weight="700" color="#444444" lineHeight={1.2}>Sign In</SText>
+                      <SText size="14px" weight="400" color="#999999">Sign in to your account</SText>
+                    </Content>
                     <CardContent style={{ padding: isMobile ? '16px 0' : '16px' }}>
                       <div className={classes.formSpacing}>
                         <TextField
@@ -175,12 +188,12 @@ Log in
                 </Grow>
                 <Fade in>
                   <div className="formFooter">
-                    <Button color="inherit" className={classes.button} onClick={() => this.props.history.push('/register')}>
+                    <Button color="primary" className={classes.button} onClick={() => this.props.history.push('/signup/init')}>
               Sign Up
                     </Button>
-                    <Button color="inherit" className={classes.button}>
+                    {/* <Button color="inherit" className={classes.button}>
               Forgot Password
-                    </Button>
+                    </Button> */}
                   </div>
                 </Fade>
               </Grid>
@@ -196,7 +209,7 @@ Login.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  userInfo: state.saveUser.userInfo
+  userInfo: state.userInfo.userInfo
 });
 
 export default connect(mapStateToProps)(withStyles(styles, { withRouter: true })(Login));

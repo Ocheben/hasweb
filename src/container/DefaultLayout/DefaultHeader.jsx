@@ -136,7 +136,7 @@ DefaultHeader.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  userInfo: state.saveUser.userInfo
+  userInfo: state.userInfo.userInfo
 });
 
 export default withRouter(connect(mapStateToProps)(withStyles(styles, { withTheme: true })(DefaultHeader)));

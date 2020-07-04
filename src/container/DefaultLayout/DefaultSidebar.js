@@ -62,7 +62,7 @@ class DefaultSidebar extends React.Component {
     const menuList = userType === 'seller' ? [
       { name: 'Dashboard', icon: <HomeIcon color="#fff" sidebarIcon />, link: '/dashboard' },
       { name: 'Browse Jobs', icon: <ShipmentIcon color="#fff" sidebarIcon />, link: '/jobs' },
-      { name: 'Bids', icon: <HistoryIcon color="#fff" sidebarIcon />, link: '/shipmenthistory' },
+      { name: 'Bids', icon: <HistoryIcon color="#fff" sidebarIcon />, link: '/bids' },
       { name: 'Profile', icon: <BikerIcon color="#fff" sidebarIcon />, link: '/profile' }
     ] : [
       { name: 'Dashboard', icon: <HomeIcon color="#fff" sidebarIcon />, link: '/dashboard' },
@@ -117,7 +117,7 @@ class DefaultSidebar extends React.Component {
             })}
             >
               <Avatar alt="User Avatar" src={avatar} className={classes.userAvatar} />
-              <Typography variant="subtitle2" className={classes.sidebarAvatarText} color="inherit">{userInfo.name}</Typography>
+              <Typography variant="subtitle2" className={classes.sidebarAvatarText} color="inherit">{`${userInfo.firstname} ${userInfo.lastname}`}</Typography>
               <Typography variant="caption" className={classes.sidebarAvatarText} color="inherit" gutterBottom>{userInfo.email}</Typography>
             </div>
 }
@@ -140,7 +140,7 @@ DefaultSidebar.propTypes = {
   theme: PropTypes.object.isRequired,
 };
 const mapStateToProps = state => ({
-  userInfo: state.saveUser.userInfo,
+  userInfo: state.userInfo.userInfo,
   userType: state.uiReducer.userType
 });
 

@@ -3,10 +3,11 @@ import { AUTHACTIONS, USERACTIONS } from '../_constants';
 const initState = {
   userInfo: {
     phone: '',
-  }
+  },
+  initSignup: {}
 };
 
-const { LOGIN, LOGOUT, CREDITWALLET } = AUTHACTIONS;
+const { LOGIN, LOGOUT, CREDITWALLET, INIT_SINGUP } = AUTHACTIONS;
 
 const saveUser = (state = initState, action) => {
   switch (action.type) {
@@ -14,6 +15,12 @@ const saveUser = (state = initState, action) => {
       return {
         ...state,
         userInfo: { ...state.userInfo, ...action.payload },
+      };
+
+    case INIT_SINGUP:
+      return {
+        ...state,
+        initSignup: action.payload
       };
 
     case LOGOUT:

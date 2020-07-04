@@ -39,7 +39,7 @@ export const styles = theme => ({
     padding: '0.8em',
   },
   loginInput: {
-    width: '80%',
+    width: '100%',
   },
   floatRight: {
     float: 'right'
@@ -84,7 +84,7 @@ export const styles = theme => ({
     },
   },
   buttonProgress: {
-    color: blue[700],
+    color: blue[900],
     position: 'absolute',
     top: '50%',
     left: '50%',
@@ -158,7 +158,7 @@ export const styles = theme => ({
   },
   drawerPaper: {
     width: drawerWidth,
-    backgroundColor: blue[700]
+    backgroundColor: blue[900]
   },
   drawerToggle: {
     display: 'flex',
@@ -322,10 +322,10 @@ export const styles = theme => ({
     fontSize: 20,
   },
   blueButton: {
-    backgroundColor: blue[700],
+    backgroundColor: blue[900],
     color: '#fff',
     '&:hover': {
-      backgroundColor: blue[900],
+      backgroundColor: blue[800],
     }
   },
   formStepper: {
@@ -400,7 +400,8 @@ export const styles = theme => ({
   },
   formCard: {
     padding: '2em 2em 3em 2em',
-    margin: 'auto'
+    margin: 'auto',
+    width: '70%'
   },
   formSpacing: {
     padding: '0.5em'

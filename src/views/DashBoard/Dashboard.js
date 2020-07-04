@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Avatar } from '@material-ui/core';
 import {
   SDiv, SText, StyledButton, StyledHr, ItemCard, Content
@@ -8,7 +9,7 @@ import avatar from '../../assets/img/avatar.png';
 
 // eslint-disable-next-line arrow-body-style
 const Dashboard = (props) => {
-  const { history } = props;
+  const { history, userInfo } = props;
   return (
     <SDiv id="mainView" flex horizontal align="flex-start" justify="space-evenly" fadeIn>
       <SDiv width="60%" justify="center" flex align="center">
@@ -93,35 +94,64 @@ const Dashboard = (props) => {
             <StyledButton width="auto" color="primary" onClick={() => history.push('/profile')}>View</StyledButton>
           </SDiv>
           <StyledHr hmargin={0} />
-        </SDiv>
-        <ItemCard width="84%" height="30vh" vmargin="2rem" curved>
-            <SDiv borderBox id="header" flex horizontal justify="space-between" align="center" height="4em">
-              <SText color="#444444" size="24px" weight="700">Bid Summary</SText>
-              <StyledButton width="auto" color="primary" onClick={() => history.push('/bids')}>View Bids</StyledButton>
+          <SDiv flex justify="space-around" tmargin="0.5em" height="100%" hpadding="1.5em" borderBox>
+            <SDiv flex horizontal bmargin="1em" justify="space-between">
+              <SText color="#444444" weight="500" size="17px">Total Bids</SText>
+              <SText color="#999999" size="17px">15</SText>
             </SDiv>
-              <StyledHr style={{ margin: '0 -2rem' }} />
-              <SDiv tmargin="0.5em">
-                <SDiv flex horizontal justify="space-between">
-                  <SText color="#444444" weight="500" size="17px">Total Bids</SText>
-                  <SText color="#999999" size="17px">15</SText>
-                </SDiv>
-                <SDiv flex horizontal justify="space-between">
-                  <SText color="#444444" weight="500" size="17px">Bids Placed</SText>
-                  <SText color="#999999" size="17px">5</SText>
-                </SDiv>
-                <SDiv flex horizontal justify="space-between">
-                  <SText color="#444444" weight="500" size="17px">Bids Left</SText>
-                  <SText color="#999999" size="17px">10</SText>
-                </SDiv>
-                <SDiv flex horizontal justify="space-between">
-                  <SText color="#444444" weight="500" size="17px">Bids Accepted</SText>
-                  <SText color="#999999" size="17px">4</SText>
-                </SDiv>
-              </SDiv>
-        </ItemCard>
+            <SDiv flex horizontal bmargin="1em" justify="space-between">
+              <SText color="#444444" weight="500" size="17px">Bids Placed</SText>
+              <SText color="#999999" size="17px">5</SText>
+            </SDiv>
+            {/* <SDiv flex horizontal bmargin="1em" justify="space-between">
+              <SText color="#444444" weight="500" size="17px">Bids Left</SText>
+              <SText color="#999999" size="17px">10</SText>
+            </SDiv> */}
+            <SDiv flex horizontal bmargin="1em" justify="space-between">
+              <SText color="#444444" weight="500" size="17px">Bids Accepted</SText>
+              <SText color="#999999" size="17px">4</SText>
+            </SDiv>
+            <SDiv flex horizontal bmargin="1em" justify="space-between">
+              <SText color="#444444" weight="500" size="17px">Wallet Balance</SText>
+              <SText color="#999999" size="17px">
+&#8358;
+                {userInfo.walletBal && userInfo.walletBal.toLocaleString()}
+              </SText>
+            </SDiv>
+          </SDiv>
+        </SDiv>
+        {/* <ItemCard width="84%" height="30vh" vmargin="2rem" curved>
+          <SDiv borderBox id="header" flex horizontal justify="space-between" align="center" height="4em">
+            <SText color="#444444" size="24px" weight="700">Bid Summary</SText>
+            <StyledButton width="auto" color="primary" onClick={() => history.push('/bids')}>View Bids</StyledButton>
+          </SDiv>
+          <StyledHr style={{ margin: '0 -2rem' }} />
+          <SDiv tmargin="0.5em">
+            <SDiv flex horizontal justify="space-between">
+              <SText color="#444444" weight="500" size="17px">Total Bids</SText>
+              <SText color="#999999" size="17px">15</SText>
+            </SDiv>
+            <SDiv flex horizontal justify="space-between">
+              <SText color="#444444" weight="500" size="17px">Bids Placed</SText>
+              <SText color="#999999" size="17px">5</SText>
+            </SDiv>
+            <SDiv flex horizontal justify="space-between">
+              <SText color="#444444" weight="500" size="17px">Bids Left</SText>
+              <SText color="#999999" size="17px">10</SText>
+            </SDiv>
+            <SDiv flex horizontal justify="space-between">
+              <SText color="#444444" weight="500" size="17px">Bids Accepted</SText>
+              <SText color="#999999" size="17px">4</SText>
+            </SDiv>
+          </SDiv>
+        </ItemCard> */}
       </SDiv>
     </SDiv>
   );
 };
 
-export default Dashboard;
+const mapStateToProps = state => ({
+  userInfo: state.userInfo.userInfo
+});
+
+export default connect(mapStateToProps)(Dashboard);

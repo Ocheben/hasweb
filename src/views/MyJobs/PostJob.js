@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
+import { CircularProgress } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
@@ -9,8 +11,9 @@ import MuiDialogActions from '@material-ui/core/DialogActions';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
-import { Input, Content } from '../Components';
+import { Input, Content, SText, StyledButton, colors, SDiv } from '../Components';
 import { getData, URLS } from '../../_services';
+import { setAlert } from '../../_actions/userActions';
 
 const styles = theme => ({
   root: {
@@ -26,7 +29,7 @@ const styles = theme => ({
 });
 
 const DialogTitle = withStyles(styles)((props) => {
-  const { children, classes, onClose } = props;
+  const { children, classes, onClose, history } = props;
   return (
     <MuiDialogTitle disableTypography className={classes.root}>
       <Typography variant="h6">{children}</Typography>
@@ -53,7 +56,10 @@ const DialogActions = withStyles(theme => ({
 }))(MuiDialogActions);
 
 const CustomizedDialogs = (props) => {
-  const { handleClose, open, userInfo } = props;
+  const { handleClose, open, userInfo, submit, history, dispatch } = props;
+  const { walletBal } = userInfo;
+  const [loading, setLoading] = useState(false);
+  const [openFeedback, setOpenFeedback] = useState(false)
   const [formInputs, setformInputs] = useState({
     userId: userInfo.userId,
     date: new Date().toISOString(),
@@ -76,14 +82,12 @@ const CustomizedDialogs = (props) => {
     getSkills();
   }, []);
   const handleChange = ({ target }) => {
-    console.log(skills);
     const value = () => {
       if (target.name === 'price') {
         return parseInt(target.value, 10);
       }
       return target.value;
     };
-    console.log(formInputs);
     return setformInputs(inputs => ({
       ...inputs,
       [target.name]: value()
@@ -91,16 +95,27 @@ const CustomizedDialogs = (props) => {
   };
 
   const handleSubmit = async () => {
+    if (formInputs.price > walletBal) {
+      setOpenFeedback(true);
+      return;
+    }
+    setLoading(true);
     const response = await getData('POST', URLS.POSTJOB, formInputs);
-    if (!Object.prototype.hasOwnProperty.call(response, 'meta')) {
-      return null;
-    }
+    console.log(response);
+    // if (!Object.prototype.hasOwnProperty.call(response, 'meta')) {
+    //   return;
+    // }
 
-    if (response.meta.status !== 200) {
-      return null;
+    if (response.meta && response.meta.status === 200) {
+      dispatch(setAlert({ open: true, variant: 'info', message: 'Job posted' }));
+      console.log('successfully posted');
+      submit();
+      setLoading(false);
+      props.handleClose();
+    } else {
+      dispatch(setAlert({ open: true, variant: 'error', message: 'Unable to complete' }));
+      setLoading(false);
     }
-    console.log('successfully posted');
-    return props.handleClose();
   };
 
   const skillOptions = skills.map(skill => ({
@@ -108,40 +123,65 @@ const CustomizedDialogs = (props) => {
     value: skill.skill_id
   }));
   return (
-    <Dialog fullWidth maxWidth="sm" onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
-      <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-            Post a Job
-      </DialogTitle>
-      <DialogContent dividers>
-        <Content hpadding="1em">
-          <Input type="text" label="Job Title" variant="outlined" vmargin="0.5em" name="jobTitle" value={formInputs.jobTitle} onChange={e => handleChange(e)} />
-          <Content display="flex" horizontal justify="space-between">
-            <Input
-              label="Category"
-              variant="outlined"
-              select
-              options={skillOptions}
-              name="skillId"
-              value={formInputs.skillId}
-              onChange={e => handleChange(e)}
-              vmargin="0.5em"
-              width="45%"
-            />
-            <Input type="number" label="Price" variant="outlined" preicon="&#8358;" vmargin="0.5em" width="45%" name="price" value={formInputs.price} onChange={e => handleChange(e)} />
+    <>
+      <Dialog fullWidth maxWidth="sm" onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
+        <DialogTitle id="customized-dialog-title" onClose={handleClose}>
+              Post a Job
+        </DialogTitle>
+        <DialogContent dividers>
+          <Content hpadding="1em">
+            <Input type="text" label="Job Title" variant="outlined" vmargin="0.5em" name="jobTitle" value={formInputs.jobTitle} onChange={e => handleChange(e)} />
+            <Content display="flex" horizontal justify="space-between">
+              <Input
+                label="Category"
+                variant="outlined"
+                select
+                options={skillOptions}
+                name="skillId"
+                value={formInputs.skillId}
+                onChange={e => handleChange(e)}
+                vmargin="0.5em"
+                width="45%"
+              />
+              <Input type="number" label="Price" variant="outlined" preicon="&#8358;" vmargin="0.5em" width="45%" name="price" value={formInputs.price} onChange={e => handleChange(e)} />
+            </Content>
+            <Input label="Job Description" variant="outlined" vmargin="0.5em" multiline rows="4" name="jobDesc" value={formInputs.jobDesc} onChange={e => handleChange(e)} />
           </Content>
-          <Input label="Job Description" variant="outlined" vmargin="0.5em" multiline rows="4" name="jobDesc" value={formInputs.jobDesc} onChange={e => handleChange(e)} />
-        </Content>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={() => handleSubmit()} color="primary">
-            Post Job
-        </Button>
-      </DialogActions>
-    </Dialog>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => handleSubmit()} color="primary">
+            {loading ? <CircularProgress style={{ color: colors.primary }} size={24} /> : <SText color={colors.primary} size="14px" weight="700">Post Job</SText>}
+
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog onClose={() => setOpenFeedback(false)} open={openFeedback} fullWidth maxWidth="xs">
+        <DialogTitle>Rate Service Provider</DialogTitle>
+        <SDiv flex align="center" vmargin="1em">
+          You do not have sufficient funds in your wallet for this job
+        </SDiv>
+        <DialogActions>
+          <StyledButton
+            color="primary"
+            vmargin="1em"
+            onClick={() => setOpenFeedback(false)}
+          >
+            Cancel
+          </StyledButton>
+          <StyledButton
+            color="primary"
+            vmargin="1em"
+            onClick={() => history.push('/profile')}
+          >
+              Go to Wallet
+          </StyledButton>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 
 const mapStateToProps = state => ({
-  userInfo: state.saveUser.userInfo
+  userInfo: state.userInfo.userInfo
 });
-export default connect(mapStateToProps)(CustomizedDialogs);
+export default withRouter(connect(mapStateToProps)(CustomizedDialogs));

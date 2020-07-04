@@ -8,6 +8,7 @@ import rootReducer from './_reducers'
 import { Provider } from 'react-redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import 'typeface-roboto';
 
 import { PersistGate } from 'redux-persist/lib/integration/react';
@@ -16,7 +17,7 @@ import * as serviceWorker from './serviceWorker';
 import App from './App';
 // import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 
-Sentry.init({ dsn: 'https://c5553768945946de845390fd807d4be6@sentry.io/1521245' });
+// Sentry.init({ dsn: 'https://c5553768945946de845390fd807d4be6@sentry.io/1521245' });
 const encryptor = createEncryptor({
   secretKey: 'necoUser',
   onError(error) {
@@ -28,9 +29,9 @@ const encryptor = createEncryptor({
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['saveUser'],
-  transforms: [encryptor]
-  // stateReconciler: autoMergeLevel2
+  whitelist: ['userInfo', 'userData'],
+  transforms: [encryptor],
+  stateReconciler: autoMergeLevel2
 };
 
 const pReducer = persistReducer(persistConfig, rootReducer);
@@ -39,7 +40,7 @@ const store = createStore(
   {},
   compose(applyMiddleware(thunk),
     // eslint-disable-next-line no-underscore-dangle
-    window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f)
+    window.devToolsExtension ? window.devToolsExtension() : f => f)
 );
 // eslint-disable-next-line import/prefer-default-export
 export const persistor = persistStore(store);
