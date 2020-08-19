@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Avatar, Icon, CircularProgress, Dialog, DialogTitle } from '@material-ui/core';
+import { Avatar, Icon, CircularProgress, Dialog, DialogTitle, DialogActions } from '@material-ui/core';
 import Rating from '@material-ui/lab/Rating';
 import { connect } from 'react-redux';
 import { blue } from '@material-ui/core/colors';
@@ -9,11 +9,12 @@ import {
 import avatar from '../../assets/img/avatar.png';
 import { recentJobs } from './data';
 import { getData, APIS } from '../../_services';
+import { setAlert } from '../../_actions/userActions';
 
 const Bid = (props) => {
-  const { userInfo, userData, match } = props;
-  const { userId } = userInfo;
-  const { params : { bid_id }} = match
+  const { userInfo, userData, match, dispatch, history } = props;
+  const { userId, walletBal } = userInfo;
+  const { params : { bid_id }} = match;
   const { userJobBids } = userData;
   const bidItem = userJobBids.find(bid => bid.bid_id === parseInt(bid_id, 10)) || {};
   const { firstname, lastname, email, phone, message, job_id, accepted, completed, price } = bidItem;
@@ -21,21 +22,35 @@ const Bid = (props) => {
   const [rating, setRating] = useState(0);
   const [openRating, setOpenRating] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [openFeedback, setOpenFeedback] = useState(false)
 
   const acceptBid = async () => {
+    console.log(bidItem);
+    if (parseInt(bidItem.price, 10) > parseInt(walletBal, 10)) {
+      dispatch(setAlert({ open: true, variant: 'error', message: 'Price of bid is more than wallet balance' }));
+      setOpenFeedback(true);
+      return;
+    }
     const { testUrl, acceptBid: { method, path } } = APIS;
     const url = testUrl + path;
     const payload = {
       userId,
       jobId: job_id,
       bidId: bidItem.bid_id,
-      providerId: bidItem.user_id
+      providerId: bidItem.user_id,
+      // price: parseInt(bidItem.price, 10)
     };
 
     setLoading(true);
     const response = await getData(method, url, payload);
+    // eslint-disable-next-line camelcase
+    history.push(`/myJobs/${job_id}`);
+    dispatch(setAlert({ open: true, variant: 'info', message: 'Bid Accepted' }));
     console.log(response);
-    // if(response.meta && response.meta.status === 200) {};
+    if (response.meta && response.meta.status === 200) {
+      dispatch(setAlert({ open: true, variant: 'info', message: 'Bid Accepted' }));
+
+    }
     setLoading(false);
   };
 
@@ -55,6 +70,9 @@ const Bid = (props) => {
     const response = await getData(method, url, payload);
     if (response.meta && response.meta.status === 200) {
       setOpenRating(false);
+      if (response.meta && response.meta.status === 200) {
+        dispatch(setAlert({ open: true, variant: 'info', message: 'Bid Completed' }));
+      }
     }
     console.log(response);
     // if(response.meta && response.meta.status === 200) {};
@@ -254,6 +272,29 @@ const Bid = (props) => {
             {loading ? <CircularProgress style={{ color: '#ffffff' }} size={24} /> : 'Submit '}
           </StyledButton>
         </SDiv>
+      </Dialog>
+
+      <Dialog onClose={() => setOpenFeedback(false)} open={openFeedback} fullWidth maxWidth="xs">
+        <DialogTitle>Rate Service Provider</DialogTitle>
+        <SDiv flex align="center" vmargin="1em">
+          You do not have sufficient funds in your wallet for this bid
+        </SDiv>
+        <DialogActions>
+          <StyledButton
+            color="primary"
+            vmargin="1em"
+            onClick={() => setOpenFeedback(false)}
+          >
+            Cancel
+          </StyledButton>
+          <StyledButton
+            color="primary"
+            vmargin="1em"
+            onClick={() => history.push('/profile')}
+          >
+              Go to Wallet
+          </StyledButton>
+        </DialogActions>
       </Dialog>
     </SDiv>
   );

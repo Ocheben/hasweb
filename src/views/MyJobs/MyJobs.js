@@ -7,9 +7,10 @@ import {
 } from '../Components';
 import { getData, URLS, APIS } from '../../_services';
 import PostJob from './PostJob';
+import { setAlert } from '../../_actions/userActions';
 
 const MyJobs = (props) => {
-  const { userInfo } = props;
+  const { userInfo, dispatch } = props;
   const { userId } = userInfo;
   const [loading, setLoading] = useState(true);
   const [jobList, setJobList] = useState([]);
@@ -22,17 +23,22 @@ const MyJobs = (props) => {
     setLoading(true);
     const { testUrl, getUserJobs: { path, method } } = APIS;
     const url = testUrl + path(userId);
-    const response = await getData(method, url);
-    console.log(response);
-    if (!Object.prototype.hasOwnProperty.call(response, 'meta')) {
-      return null;
-    }
+    try {
+      const response = await getData(method, url);
+      console.log(response);
+      if (!Object.prototype.hasOwnProperty.call(response, 'meta')) {
+        dispatch(setAlert({ open: true, variant: 'error', message: 'You havent posted any job yet' }));
+      }
 
-    if (response.meta.status !== 200) {
-      return null;
+      if (response.meta.status !== 200) {
+        dispatch(setAlert({ open: true, variant: 'error', message: 'You havent posted any job yet' }));
+      }
+      setJobList(response.data.jobs);
+    } catch (error) {
+      console.log(error)
+      dispatch(setAlert({ open: true, variant: 'error', message: 'You havent posted any job yet' }));
     }
     setLoading(false);
-    return setJobList(response.data.jobs);
   };
   return (
     <Container justify="center" align="center">
