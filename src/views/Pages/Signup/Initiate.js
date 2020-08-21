@@ -13,7 +13,7 @@ import {
 import logo from '../../../assets/img/logo.png';
 import { APIS, request } from '../../../_services';
 import { initSignup } from '../../../_actions/authAction';
-// import { setAlert } from '../../../../_store/actions';
+import { setAlert } from '../../../_actions/userActions';
 // import { login } from '../../../../_store/actions/authActions';
 
 
@@ -51,8 +51,8 @@ export const Login = (props) => {
       dispatch(initSignup({ email, phone }));
       setLoading(false);
       history.push(`/signup/verify/+234${phone.substring(1)}`);
-    } else if (response.meta && response.meta.status === 404) {
-      // dispatch(setAlert({ open: true, variant: 'error', message: 'Invalid email or password' }));
+    } else if (response.meta && response.meta.status === 406) {
+      dispatch(setAlert({ open: true, variant: 'error', message: response.meta.message }));
     } else {
       console.log('error');
     }

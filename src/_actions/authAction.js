@@ -1,6 +1,6 @@
 import { AUTHACTIONS, USERACTIONS } from '../_constants';
 
-const { LOGIN, LOGOUT, CREDITWALLET, INIT_SINGUP } = AUTHACTIONS;
+const { LOGIN, LOGOUT, CREDITWALLET, DEBITWALLET, INIT_SINGUP } = AUTHACTIONS;
 const { ASSIGN, PICKUP, DELIVER, SET_USERJOBBIDS } = USERACTIONS;
 
 export const saveUser = userData => ({
@@ -10,6 +10,10 @@ export const saveUser = userData => ({
 
 export const creditWallet = payload => ({
   type: CREDITWALLET,
+  payload
+});
+export const debitWallet = payload => ({
+  type: DEBITWALLET,
   payload
 });
 

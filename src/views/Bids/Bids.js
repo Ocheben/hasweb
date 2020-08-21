@@ -74,7 +74,7 @@ const Bids = (props) => {
                           &#8358;
                         {Number(price).toLocaleString()}
                       </SText>
-                      {accepted && (
+                      {accepted && !completed && (
                       <SText color="#ffc107" size="20px" weight="700">
                           ACCEPTED
                       </SText>

@@ -7,7 +7,7 @@ const initState = {
   initSignup: {}
 };
 
-const { LOGIN, LOGOUT, CREDITWALLET, INIT_SINGUP } = AUTHACTIONS;
+const { LOGIN, LOGOUT, CREDITWALLET, DEBITWALLET, INIT_SINGUP } = AUTHACTIONS;
 
 const saveUser = (state = initState, action) => {
   switch (action.type) {
@@ -35,6 +35,15 @@ const saveUser = (state = initState, action) => {
         userInfo: {
           ...state.userInfo,
           walletBal: state.userInfo.walletBal + action.payload
+        }
+      };
+
+    case DEBITWALLET:
+      return {
+        ...state,
+        userInfo: {
+          ...state.userInfo,
+          walletBal: state.userInfo.walletBal - action.payload
         }
       };
     default: return state;

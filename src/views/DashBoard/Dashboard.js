@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Avatar } from '@material-ui/core';
+import Rating from '@material-ui/lab/Rating';
 import {
   SDiv, SText, StyledButton, StyledHr, ItemCard, Content
 } from '../Components';
@@ -10,6 +11,7 @@ import avatar from '../../assets/img/avatar.png';
 // eslint-disable-next-line arrow-body-style
 const Dashboard = (props) => {
   const { history, userInfo } = props;
+  const { rating } = userInfo;
   return (
     <SDiv id="mainView" flex horizontal align="flex-start" justify="space-evenly" fadeIn>
       <SDiv width="60%" justify="center" flex align="center">
@@ -112,8 +114,15 @@ const Dashboard = (props) => {
               <SText color="#999999" size="17px">4</SText>
             </SDiv>
             <SDiv flex horizontal bmargin="1em" justify="space-between">
+              <SText color="#444444" weight="500" size="17px">Rating</SText>
+              <Rating
+                name="rating"
+                value={rating}
+              />
+            </SDiv>
+            <SDiv flex horizontal bmargin="1em" justify="space-between">
               <SText color="#444444" weight="500" size="17px">Wallet Balance</SText>
-              <SText color="#999999" size="17px">
+              <SText color="#1b5e20" size="17px" weight="700">
 &#8358;
                 {userInfo.walletBal && userInfo.walletBal.toLocaleString()}
               </SText>

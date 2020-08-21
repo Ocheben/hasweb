@@ -10,6 +10,7 @@ import avatar from '../../assets/img/avatar.png';
 import { recentJobs } from './data';
 import { getData, APIS } from '../../_services';
 import { setAlert } from '../../_actions/userActions';
+import { debitWallet } from '../../_actions/authAction';
 
 const Bid = (props) => {
   const { userInfo, userData, match, dispatch, history } = props;
@@ -31,25 +32,26 @@ const Bid = (props) => {
       setOpenFeedback(true);
       return;
     }
-    const { testUrl, acceptBid: { method, path } } = APIS;
-    const url = testUrl + path;
+    const { baseUrl, acceptBid: { method, path } } = APIS;
+    const url = baseUrl + path;
     const payload = {
       userId,
       jobId: job_id,
       bidId: bidItem.bid_id,
       providerId: bidItem.user_id,
-      // price: parseInt(bidItem.price, 10)
+      price: parseInt(bidItem.price, 10)
     };
 
     setLoading(true);
     const response = await getData(method, url, payload);
-    // eslint-disable-next-line camelcase
-    history.push(`/myJobs/${job_id}`);
-    dispatch(setAlert({ open: true, variant: 'info', message: 'Bid Accepted' }));
+    // history.push(`/myJobs/${job_id}`);
+    // dispatch(setAlert({ open: true, variant: 'info', message: 'Bid Accepted' }));
     console.log(response);
     if (response.meta && response.meta.status === 200) {
       dispatch(setAlert({ open: true, variant: 'info', message: 'Bid Accepted' }));
-
+      dispatch(debitWallet(parseInt(bidItem.price, 10)));
+      // eslint-disable-next-line camelcase
+      history.push(`/myJobs/${job_id}`);
     }
     setLoading(false);
   };
@@ -63,7 +65,7 @@ const Bid = (props) => {
       bidId: bidItem.bid_id,
       providerId: bidItem.user_id,
       rating,
-      price
+      price: parseInt(price, 10)
     };
 
     setLoading(true);
@@ -71,7 +73,9 @@ const Bid = (props) => {
     if (response.meta && response.meta.status === 200) {
       setOpenRating(false);
       if (response.meta && response.meta.status === 200) {
-        dispatch(setAlert({ open: true, variant: 'info', message: 'Bid Completed' }));
+        dispatch(setAlert({ open: true, variant: 'info', message: 'Job Completed' }));
+        // eslint-disable-next-line camelcase
+        history.push(`/myJobs/${job_id}`);
       }
     }
     console.log(response);
