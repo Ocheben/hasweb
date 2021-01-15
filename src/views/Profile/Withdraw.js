@@ -1,3 +1,4 @@
+/* eslint-disable radix */
 import React, { useState, useEffect } from 'react';
 import { Avatar, Icon, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Collapse, CircularProgress } from '@material-ui/core';
 import { connect } from 'react-redux';
@@ -7,7 +8,7 @@ import {
 } from '../Components';
 import avatar from '../../assets/img/avatar.png';
 import { APIS, getData, requestJwt } from '../../_services';
-import { creditWallet } from '../../_actions/authAction';
+import { creditWallet, debitWallet } from '../../_actions/authAction';
 import { setAlert } from '../../_actions/userActions';
 
 const Withdraw = (props) => {
@@ -71,7 +72,7 @@ const Withdraw = (props) => {
     const url = baseUrl + path;
     setLoading(true);
     try {
-      const payload = { nubanRef, amount, userId };
+      const payload = { nubanRef, amount: parseInt(amount), userId };
       const payoutData = await requestJwt(method, url, payload, '');
       console.log(payoutData, method);
       if (payoutData.meta && payoutData.meta.status === 200) {
@@ -94,13 +95,14 @@ const Withdraw = (props) => {
     const url = baseUrl + path;
     setLoading(true);
     try {
-      const payload = { transferCode, otp };
+      const payload = { transferCode, otp, amount: parseInt(amount), userId };
       const payoutData = await requestJwt(method, url, payload, '');
       console.log(payoutData, method);
       if (payoutData.meta && payoutData.meta.status === 200) {
         const { transfer_code: trfCode } = payoutData.data || {}
         console.log(payoutData.data)
         setTransferCode(trfCode);
+        dispatch(debitWallet(parseInt(amount)));
         dispatch(setAlert({ open: true, variant: 'info', message: payoutData.meta.message }));
         closeWithdraw();
       }
