@@ -9,11 +9,13 @@ import avatar from '../../assets/img/avatar.png';
 import { APIS, getData } from '../../_services';
 import { creditWallet } from '../../_actions/authAction';
 import { setAlert } from '../../_actions/userActions';
+import Withdraw from './Withdraw'
 
 const Profile = (props) => {
   const { userInfo, dispatch } = props;
   const { firstname, lastname } = userInfo;
   const [walletDialog, setWalletDialog] = useState(false);
+  const [withdrawDialog, setWithdrawDialog] = useState(false);
   const [depositAmount, setDepositAmount] = useState(0);
   const [openPay, setOpenPay] = useState(false);
   const initiatePayment = () => {
@@ -39,16 +41,15 @@ const Profile = (props) => {
   };
 
   const close = () => {
-    console.log("Payment closed");
+    console.log('Payment closed');
   }
 
   const getReference = () => {
-    //you can put any unique reference implementation code here
-    let text = "";
-    let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-.=";
+    // you can put any unique reference implementation code here
+    let text = '';
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-.=';
 
-    for( let i=0; i < 15; i++ )
-      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    for ( let i=0; i < 15; i++) text += possible.charAt(Math.floor(Math.random() * possible.length));
 
     return text;
   }
@@ -123,7 +124,7 @@ Edit
             </SDiv>
             <SDiv flex horizontal justify="space-around">
               <StyledButton color="primary" width="auto" onClick={() => setWalletDialog(true)}>Deposit Funds</StyledButton>
-              <StyledButton color="primary" width="auto">Withdraw Funds</StyledButton>
+              <StyledButton color="primary" width="auto" onClick={() => setWithdrawDialog(true)}>Withdraw Funds</StyledButton>
             </SDiv>
           </SDiv>
         </SDiv>
@@ -163,6 +164,7 @@ Edit
           />
             </DialogActions>
       </Dialog>
+      <Withdraw open={withdrawDialog} handleClose={() => setWithdrawDialog(false)} />
     </SDiv>
   );
 };

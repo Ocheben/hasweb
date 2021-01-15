@@ -67,5 +67,21 @@ export const APIS = {
   getUserBids: {
     method: 'GET',
     path: userId => `/bids/user/${userId}`
-  }
+  },
+  getBanks: {
+    method: 'GET',
+    path: '/banks'
+  },
+  addNuban: {
+    method: 'POST',
+    path: '/wallet/add_nuban'
+  },
+  initPayout: {
+    method: 'POST',
+    path: '/wallet/init_payout'
+  },
+  finalizePayout: {
+    method: 'POST',
+    path: '/wallet/finalize_payout'
+  },
 };
